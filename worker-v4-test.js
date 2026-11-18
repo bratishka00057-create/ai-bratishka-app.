@@ -591,7 +591,13 @@ const portraitCovers=[
   "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=600&q=80",
   "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&q=80",
   "https://images.unsplash.com/photo-1554151228-14d9def656e4?w=600&q=80",
-  "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=600&q=80"
+  "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=600&q=80",
+  "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600&q=80",
+  "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&q=80",
+  "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=600&q=80",
+  "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=600&q=80",
+  "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=600&q=80",
+  "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=600&q=80"
 ];
 
 if(t.category==="portrait"){
