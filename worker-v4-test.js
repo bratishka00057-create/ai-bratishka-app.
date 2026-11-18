@@ -75,10 +75,11 @@ for (const group of PHOTO_GROUPS) {
   const [category,categoryName,icon,items] = group;
 
   items.forEach((item,index) => {
+    
     const recommendedModels =
       category === "portrait" || category === "fashion"
-        ? ["nano-banana","flux"]
-        : ["flux","nano-banana"];
+        ? ["nano-banana"]
+        : ["flux"];
 
     TEMPLATES.push({
       id:category+"-"+index,
