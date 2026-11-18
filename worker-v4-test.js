@@ -677,9 +677,14 @@ const categoryCovers = {
   ]
 };
 
-const covers = categoryCovers[t.category] || [];
-const coverIndex =
-  Number(t.id.split("-").pop()) % Math.max(covers.length, 1);
+const isTravelVideo = t.id === "video-3";
+const covers = isTravelVideo
+  ? categoryCovers.travel
+  : (categoryCovers[t.category] || []);
+
+const coverIndex = isTravelVideo
+  ? 0
+  : Number(t.id.split("-").pop()) % Math.max(covers.length, 1);
 
 if (covers.length) {
   const cover = document.createElement("img");
