@@ -614,17 +614,17 @@ const malePortraitCovers=[
 "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&q=80"
 ];
 
-const femalePortraitCovers=[
-  "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=600&q=80",
+const fashionCovers=[
+  "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=600&q=80",
+  "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=600&q=80",
+  "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=600&q=80",
   "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&q=80",
-  "https://images.unsplash.com/photo-1554151228-14d9def656e4?w=600&q=80",
-  "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=600&q=80",
+  "https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?w=600&q=80",
+  "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&q=80",
+  "https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600&q=80",
+  "https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc?w=600&q=80",
   "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=600&q=80",
-  "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=600&q=80",
-  "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=600&q=80",
-  "https://images.unsplash.com/photo-1524250502761-1ac6f2e30d43?w=600&q=80",
-  "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=600&q=80",
-  "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600&q=80"
+  "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=600&q=80"
 ];
 
 if(t.category==="portrait-men" || t.category==="portrait-women"){
@@ -639,6 +639,17 @@ if(t.category==="portrait-men" || t.category==="portrait-women"){
     'url("'+covers[portraitIndex]+'")';
   icon.style.backgroundSize="cover";
   icon.style.backgroundPosition="center 35%";
+  icon.style.backgroundRepeat="no-repeat";
+  icon.textContent="";
+
+}else if(t.category==="fashion"){
+  const fashionIndex=
+    Number(t.id.split("-").pop())%fashionCovers.length;
+
+  icon.style.backgroundImage=
+    'url("'+fashionCovers[fashionIndex]+'")';
+  icon.style.backgroundSize="cover";
+  icon.style.backgroundPosition="center";
   icon.style.backgroundRepeat="no-repeat";
   icon.textContent="";
 
