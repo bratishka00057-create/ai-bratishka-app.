@@ -33,6 +33,7 @@ button:disabled{opacity:.5}
 #result{width:100%;margin-top:16px;border-radius:14px;display:none}
 #preview{display:none;width:100%;max-height:300px;object-fit:contain;border-radius:12px;margin-top:12px}
 .secondary{background:#303541;margin-top:10px}
+.download{background:linear-gradient(120deg,#168b66,#24a77c)}
 </style>
 </head>
 <body>
@@ -45,34 +46,47 @@ button:disabled{opacity:.5}
 <div class="panel">
 <h2>🎨 Создать или изменить фото</h2>
 
+<label for="mode">Режим фотостудии</label>
+<select id="mode">
+<option value="precise">Точное редактирование</option>
+<option value="creative">Новые образы и стили</option>
+</select>
+
 <label for="prompt">Что нужно сделать?</label>
 <textarea id="prompt" maxlength="1200"
-placeholder="Например: замени фон на роскошный ночной город, сохрани лицо, прическу, одежду и внешность человека, добавь профессиональный кинематографичный свет..."></textarea>
+placeholder="Например: замени фон на роскошный ночной город, сохрани лицо, внешность и одежду..."></textarea>
 
 <label for="photo">Исходная фотография</label>
 <input id="photo" type="file" accept="image/jpeg,image/png,image/webp">
 <img id="preview" alt="Предпросмотр">
 
-<label for="model">Режим работы</label>
-<select id="model">
-<option value="flux">FLUX 2 Klein — бесплатный режим</option>
-<option value="openrouter" disabled>OpenRouter — пока отключён</option>
-</select>
-
 <div class="hint">
-FLUX поддерживает генерацию изображений и редактирование по фотографии.
-Платные модели пока отключены.
+Для точного редактирования загрузи фотографию.
+Входное изображение обрабатывается с сохранением пропорций.
 </div>
 
 <button id="go">✨ Создать изображение</button>
+
 <div id="status"></div>
-<img id="result" alt="Результат">
-<button id="again" class="secondary" style="display:none">Создать ещё</button>
+
+<img id="result" alt="Готовая фотография">
+
+<button id="download" class="download" style="display:none">
+⬇️ Скачать фотографию
+</button>
+
+<button id="share" class="secondary" style="display:none">
+Поделиться / сохранить
+</button>
+
+<button id="again" class="secondary" style="display:none">
+Создать ещё
+</button>
 </div>
 </div>
 
 <script>
-const tg = window.Telegram && window.Telegram.WebApp;
+const tg=window.Telegram&&window.Telegram.WebApp;
 
 if(tg){
 tg.ready();
@@ -87,11 +101,16 @@ const result=document.getElementById("result");
 const photoInput=document.getElementById("photo");
 const preview=document.getElementById("preview");
 const again=document.getElementById("again");
+const download=document.getElementById("download");
+const share=document.getElementById("share");
 const promptInput=document.getElementById("prompt");
+const modeSelect=document.getElementById("mode");
 
 let selectedFile=null;
 let busy=false;
 let previewUrl=null;
+let resultBlob=null;
+let resultUrl=null;
 
 photoInput.addEventListener("change",()=>{
 selectedFile=photoInput.files[0]||null;
@@ -110,7 +129,7 @@ return;
 }
 
 if(selectedFile.size>20*1024*1024){
-statusBox.textContent="Фотография должна быть меньше 20 МБ.";
+statusBox.textContent="Выбери фотографию до 20 МБ.";
 photoInput.value="";
 selectedFile=null;
 return;
@@ -121,30 +140,62 @@ preview.src=previewUrl;
 preview.style.display="block";
 });
 
-async function resizeImage(file){
+async function prepareImage(file){
 const bitmap=await createImageBitmap(file);
-const maxSide=512;
-const scale=Math.min(1,maxSide/Math.max(bitmap.width,bitmap.height));
+
+const maxInput=496;
+const scale=Math.min(1,maxInput/Math.max(bitmap.width,bitmap.height));
 
 const canvas=document.createElement("canvas");
 canvas.width=Math.max(1,Math.round(bitmap.width*scale));
 canvas.height=Math.max(1,Math.round(bitmap.height*scale));
 
 const context=canvas.getContext("2d");
+
 if(!context){
 bitmap.close();
-throw new Error("Не удалось обработать фотографию");
+throw new Error("Ошибка обработки фотографии");
 }
 
 context.drawImage(bitmap,0,0,canvas.width,canvas.height);
+
+const originalWidth=bitmap.width;
+const originalHeight=bitmap.height;
 bitmap.close();
 
 const blob=await new Promise(resolve=>
 canvas.toBlob(resolve,"image/jpeg",0.90)
 );
 
-if(!blob)throw new Error("Ошибка обработки фотографии");
-return blob;
+if(!blob)throw new Error("Не удалось подготовить фотографию");
+
+const outputScale=Math.min(
+1,
+1024/Math.max(originalWidth,originalHeight)
+);
+
+const outputWidth=Math.max(256,Math.round(originalWidth*outputScale/16)*16);
+const outputHeight=Math.max(256,Math.round(originalHeight*outputScale/16)*16);
+
+return {
+blob,
+width:outputWidth,
+height:outputHeight
+};
+}
+
+function clearResult(){
+result.style.display="none";
+download.style.display="none";
+share.style.display="none";
+again.style.display="none";
+
+if(resultUrl){
+URL.revokeObjectURL(resultUrl);
+resultUrl=null;
+}
+
+resultBlob=null;
 }
 
 async function runGeneration(){
@@ -165,19 +216,47 @@ return;
 busy=true;
 button.disabled=true;
 again.disabled=true;
-again.style.display="none";
-result.style.display="none";
+clearResult();
 
-statusBox.textContent="🎨 AI Bratishka работает над изображением...";
+statusBox.textContent="🎨 AI Bratishka создаёт фотографию...";
 
 try{
 const data=new FormData();
-data.append("prompt",prompt);
+
+let finalPrompt=prompt;
+
+if(modeSelect.value==="precise"&&selectedFile){
+finalPrompt=
+"Edit the supplied photograph. Preserve the original person's identity, face, facial features, hairstyle, body proportions, clothing and pose as faithfully as possible. Do not redesign or replace the person. Change only what the user explicitly requests. Keep all other details unchanged. Make the result photorealistic. User instruction: "+
+prompt;
+}
+
+if(modeSelect.value==="creative"&&selectedFile){
+finalPrompt=
+"Use the supplied photograph as a visual reference. Create the requested artistic transformation while maintaining recognizable identity and natural anatomy where possible. User instruction: "+
+prompt;
+}
+
+data.append("prompt",finalPrompt);
 
 if(selectedFile){
-const resized=await resizeImage(selectedFile);
-data.append("input_image_0",resized,"photo.jpg");
+statusBox.textContent="🖼️ Подготавливаю фотографию...";
+
+const prepared=await prepareImage(selectedFile);
+
+if(prepared.blob.size>5*1024*1024){
+throw new Error("Подготовленная фотография слишком большая");
 }
+
+data.append("input_image_0",prepared.blob,"photo.jpg");
+data.append("width",String(prepared.width));
+data.append("height",String(prepared.height));
+}else{
+data.append("width","1024");
+data.append("height","1024");
+}
+
+statusBox.textContent="✨ Модель обрабатывает изображение...";
 
 const response=await fetch("/api/generate",{
 method:"POST",
@@ -193,10 +272,24 @@ throw new Error(answer.error||"Ошибка генерации");
 
 if(!answer.image)throw new Error("Изображение не получено");
 
-result.src="data:image/png;base64,"+answer.image;
+const binary=atob(answer.image);
+const bytes=new Uint8Array(binary.length);
+
+for(let i=0;i<binary.length;i++){
+bytes[i]=binary.charCodeAt(i);
+}
+
+resultBlob=new Blob([bytes],{type:"image/png"});
+resultUrl=URL.createObjectURL(resultBlob);
+
+result.src=resultUrl;
 result.style.display="block";
-statusBox.textContent="✨ Готово! Изображение создано.";
+
+download.style.display="block";
+share.style.display="block";
 again.style.display="block";
+
+statusBox.textContent="✨ Готово! Фотография создана.";
 
 }catch(error){
 statusBox.textContent="Не получилось: "+error.message;
@@ -207,8 +300,49 @@ again.disabled=false;
 }
 }
 
+download.addEventListener("click",()=>{
+if(!resultBlob)return;
+
+const url=URL.createObjectURL(resultBlob);
+const link=document.createElement("a");
+
+link.href=url;
+link.download="AI-Bratishka-"+Date.now()+".png";
+document.body.appendChild(link);
+link.click();
+link.remove();
+
+setTimeout(()=>URL.revokeObjectURL(url),60000);
+});
+
+share.addEventListener("click",async()=>{
+if(!resultBlob)return;
+
+try{
+const file=new File(
+[resultBlob],
+"AI-Bratishka.png",
+{type:"image/png"}
+);
+
+if(navigator.canShare&&navigator.canShare({files:[file]})){
+await navigator.share({
+files:[file],
+title:"AI Bratishka"
+});
+}else{
+statusBox.textContent="Нажми «Скачать фотографию» или открой изображение.";
+}
+}catch(error){
+if(error.name!=="AbortError"){
+statusBox.textContent="Не удалось открыть меню отправки. Попробуй скачать фотографию.";
+}
+}
+});
+
 button.addEventListener("click",runGeneration);
 again.addEventListener("click",runGeneration);
+
 </script>
 </body>
 </html>`;
@@ -218,7 +352,7 @@ async fetch(request,env){
 const url=new URL(request.url);
 
 if(request.method==="GET"&&url.pathname==="/"){
-return new Response("AI Bratishka Studio v2 is running!",{
+return new Response("AI Bratishka Studio v3 is running!",{
 headers:{"Content-Type":"text/plain; charset=utf-8"}
 });
 }
@@ -237,63 +371,37 @@ if(request.method==="POST"&&url.pathname==="/api/generate"){
 return generateImage(request,env);
 }
 
-if(request.method==="POST"&&url.pathname==="/api/openrouter"){
-return generateOpenRouterImage(request,env);
-}
-
 return new Response("Not found",{status:404});
 }
 };
 
 async function checkRequest(request,env){
 if(!env.BOT_TOKEN){
-return Response.json({error:"Не настроена проверка Telegram"},{status:503});
+return Response.json(
+{error:"Не настроена проверка Telegram"},
+{status:503}
+);
 }
 
 const length=Number(request.headers.get("Content-Length")||0);
 
 if(length>8*1024*1024){
-return Response.json({error:"Запрос слишком большой"},{status:413});
+return Response.json(
+{error:"Запрос слишком большой"},
+{status:413}
+);
 }
 
 const initData=request.headers.get("X-Telegram-Init-Data");
 
 if(!await verifyTelegram(initData,env.BOT_TOKEN)){
-return Response.json({
-error:"Не удалось проверить Telegram. Открой приложение заново."
-},{status:401});
+return Response.json(
+{error:"Не удалось проверить Telegram. Открой приложение заново."},
+{status:401}
+);
 }
 
 return null;
-}
-
-async function readInput(request){
-const data=await request.formData();
-const prompt=String(data.get("prompt")||"").trim();
-const photo=data.get("input_image_0");
-
-if(!prompt)return {error:"Напиши описание изображения"};
-
-if(prompt.length>MAX_PROMPT)return {error:"Описание слишком длинное"};
-
-let bytes=null;
-let type=null;
-
-if(photo&&typeof photo.arrayBuffer==="function"&&photo.size>0){
-if(photo.size>MAX_IMAGE_SIZE){
-return {error:"Фотография слишком большая"};
-}
-
-type=photo.type||"";
-
-if(!["image/jpeg","image/png","image/webp"].includes(type)){
-return {error:"Поддерживаются JPG, PNG и WEBP"};
-}
-
-bytes=await photo.arrayBuffer();
-}
-
-return {prompt,bytes,type};
 }
 
 async function generateImage(request,env){
@@ -301,23 +409,76 @@ const auth=await checkRequest(request,env);
 if(auth)return auth;
 
 if(!env.AI){
-return Response.json({error:"Не настроена модель Cloudflare AI"},{status:503});
+return Response.json(
+{error:"Не настроена модель Cloudflare AI"},
+{status:503}
+);
 }
 
 try{
-const input=await readInput(request);
-if(input.error)return Response.json({error:input.error},{status:400});
+const data=await request.formData();
+
+const prompt=String(data.get("prompt")||"").trim();
+const photo=data.get("input_image_0");
+
+if(!prompt){
+return Response.json(
+{error:"Напиши описание изображения"},
+{status:400}
+);
+}
+
+if(prompt.length>MAX_PROMPT+500){
+return Response.json(
+{error:"Описание слишком длинное"},
+{status:400}
+);
+}
+
+let width=Number(data.get("width")||1024);
+let height=Number(data.get("height")||1024);
+
+if(
+!Number.isInteger(width)||
+!Number.isInteger(height)||
+width<256||width>1920||
+height<256||height>1920
+){
+return Response.json(
+{error:"Неверный размер изображения"},
+{status:400}
+);
+}
 
 const form=new FormData();
-form.append("prompt",input.prompt);
-form.append("width","1024");
-form.append("height","1024");
+
+form.append("prompt",prompt);
+form.append("width",String(width));
+form.append("height",String(height));
 form.append("guidance","4");
 
-if(input.bytes){
+if(photo&&typeof photo.arrayBuffer==="function"&&photo.size>0){
+if(photo.size>MAX_IMAGE_SIZE){
+return Response.json(
+{error:"Фотография слишком большая"},
+{status:413}
+);
+}
+
+const type=photo.type||"";
+
+if(!["image/jpeg","image/png","image/webp"].includes(type)){
+return Response.json(
+{error:"Поддерживаются JPG, PNG и WEBP"},
+{status:400}
+);
+}
+
+const bytes=await photo.arrayBuffer();
+
 form.append(
 "input_image_0",
-new Blob([input.bytes],{type:input.type}),
+new Blob([bytes],{type}),
 "photo.jpg"
 );
 }
@@ -338,108 +499,39 @@ throw new Error("Модель не вернула изображение");
 return Response.json({image:result.image});
 
 }catch(error){
-console.error("FLUX error:",error.message);
-return Response.json({
-error:"Не удалось создать изображение. Попробуй ещё раз."
-},{status:500});
+console.error("FLUX generation error:",error.message);
+
+return Response.json(
+{error:"Не удалось создать изображение. Попробуй ещё раз."},
+{status:500}
+);
 }
-}
-
-async function generateOpenRouterImage(request,env){
-const auth=await checkRequest(request,env);
-if(auth)return auth;
-
-// Дополнительная блокировка платных запросов.
-// По умолчанию OpenRouter отключён.
-if(env.OPENROUTER_ENABLED!=="true"){
-return Response.json({
-error:"OpenRouter отключён. Платные запросы не разрешены."
-},{status:403});
-}
-
-if(!env.OPENROUTER_API_KEY||!env.OPENROUTER_IMAGE_MODEL){
-return Response.json({
-error:"Не настроены параметры OpenRouter"
-},{status:503});
-}
-
-try{
-const input=await readInput(request);
-if(input.error)return Response.json({error:input.error},{status:400});
-
-const body={
-model:env.OPENROUTER_IMAGE_MODEL,
-prompt:input.prompt
-};
-
-if(input.bytes){
-const base64=arrayBufferToBase64(input.bytes);
-body.input_references=[
-"data:"+input.type+";base64,"+base64
-];
-}
-
-const response=await fetch("https://openrouter.ai/api/v1/images",{
-method:"POST",
-headers:{
-"Authorization":"Bearer "+env.OPENROUTER_API_KEY,
-"Content-Type":"application/json"
-},
-body:JSON.stringify(body),
-signal:AbortSignal.timeout(120000)
-});
-
-const result=await response.json();
-
-if(!response.ok){
-console.error("OpenRouter error:",response.status);
-return Response.json({
-error:"OpenRouter не выполнил запрос. Проверь модель и баланс."
-},{status:502});
-}
-
-const image=result?.data?.[0]?.b64_json;
-
-if(!image){
-throw new Error("OpenRouter не вернул изображение");
-}
-
-return Response.json({image});
-
-}catch(error){
-console.error("OpenRouter generation error:",error.message);
-return Response.json({
-error:"Ошибка подключения к OpenRouter"
-},{status:502});
-}
-}
-
-function arrayBufferToBase64(buffer){
-const bytes=new Uint8Array(buffer);
-const chunkSize=0x8000;
-let binary="";
-
-for(let i=0;i<bytes.length;i+=chunkSize){
-binary+=String.fromCharCode(...bytes.subarray(i,i+chunkSize));
-}
-
-return btoa(binary);
 }
 
 async function verifyTelegram(initData,botToken){
-if(!initData||!botToken||initData.length>10000)return false;
+if(!initData||!botToken||initData.length>10000){
+return false;
+}
 
 try{
 const params=new URLSearchParams(initData);
+
 const receivedHash=params.get("hash");
 const authDate=Number(params.get("auth_date"));
 
-if(!receivedHash||!/^[a-f0-9]{64}$/i.test(receivedHash))return false;
-if(!Number.isFinite(authDate))return false;
+if(!receivedHash||!/^[a-f0-9]{64}$/i.test(receivedHash)){
+return false;
+}
+
+if(!Number.isFinite(authDate)){
+return false;
+}
 
 const now=Math.floor(Date.now()/1000);
 
-if(authDate>now+60||now-authDate>3600)return false;
+if(authDate>now+60||now-authDate>3600){
+return false;
+}
 
 params.delete("hash");
 
@@ -481,6 +573,10 @@ encoder.encode(checkString)
 const calculated=[...new Uint8Array(signature)]
 .map(byte=>byte.toString(16).padStart(2,"0"))
 .join("");
+
+if(calculated.length!==receivedHash.length){
+return false;
+}
 
 let difference=0;
 
