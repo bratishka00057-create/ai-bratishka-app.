@@ -590,6 +590,7 @@ return filterOK && categoryOK && collectionOK && modelOK && searchOK;
 const icon=document.createElement("span");
 icon.className="card-icon";
 
+
 const categoryCovers = {
   "portrait-men": [
     "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=600&q=80",
@@ -601,7 +602,7 @@ const categoryCovers = {
     "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=600&q=80",
     "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=600&q=80",
     "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&q=80",
-    "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600&q=80"
+    "https://images.unsplash.com/photo-1507591064344-4c6ce005b128?w=600&q=80&fit=crop&crop=faces"
   ],
 
   "portrait-women": [
@@ -642,7 +643,7 @@ const categoryCovers = {
     "https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&q=80",
     "https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=600&q=80",
     "https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=600&q=80",
-    "https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=600&q=80"
+    "https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=600&q=80&fit=crop&crop=faces"
   ],
 
   cars: [
@@ -668,11 +669,11 @@ const categoryCovers = {
     "https://images.unsplash.com/photo-1492619375914-88005aa9e8fb?w=600&q=80",
     "https://images.unsplash.com/photo-1536240478700-b869070f9279?w=600&q=80",
     "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=600&q=80",
-    "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=600&q=80",
-    "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=600&q=80",
     "https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?w=600&q=80",
-"https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=600&q=80",
-"https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=600&q=80"
+    "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=600&q=80",
+    "https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=600&q=80",
+    "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=600&q=80",
+    "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=600&q=80"
   ]
 };
 
@@ -681,15 +682,24 @@ const coverIndex =
   Number(t.id.split("-").pop()) % Math.max(covers.length, 1);
 
 if (covers.length) {
-  icon.style.backgroundImage =
-    'url("' + covers[coverIndex] + '")';
-  icon.style.backgroundSize = "cover";
-  icon.style.backgroundPosition =
-    t.category.startsWith("portrait") ? "center 35%" : "center";
-  icon.style.backgroundRepeat = "no-repeat";
-  icon.textContent = "";
+  const cover = document.createElement("img");
+  cover.src = covers[coverIndex];
+  cover.alt = t.categoryName + " — обложка";
+  cover.loading = "lazy";
+  cover.style.cssText =
+    "width:100%;height:100%;object-fit:cover;border-radius:11px;display:block";
+
+  cover.onerror = function() {
+    this.remove();
+    icon.textContent = t.icon || "✦";
+    icon.style.backgroundImage =
+      "radial-gradient(circle at 50% 35%,#514477,#28243d 55%,#191e2c)";
+  };
+
+  icon.appendChild(cover);
+  icon.style.overflow = "hidden";
 } else {
-  icon.textContent = t.icon;
+  icon.textContent = t.icon || "✦";
 }
 
 icon.setAttribute("aria-label",t.categoryName+" — обложка");
