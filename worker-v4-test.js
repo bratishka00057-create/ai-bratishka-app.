@@ -173,12 +173,62 @@ button,input,textarea{font:inherit}button{cursor:pointer}
 .category{border:1px solid var(--line);background:#171c26;border-radius:12px;padding:11px 7px;color:white;font-size:11px}
 .category.active{border-color:var(--accent);background:#292441}
 .cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
-.card{position:relative;min-width:0;min-height:106px;text-align:left;border:1px solid #30394a;background:linear-gradient(145deg,#202637,#151a24);border-radius:13px;padding:12px;color:white;display:flex;flex-direction:column;gap:7px}
-.card:hover{border-color:#8e80ed}
-.card-icon{font-size:21px}.card-name{font-size:11px;font-weight:700;line-height:1.3;padding-right:18px}
-.card-meta{font-size:9px;color:#a9b1c2}
-.star{position:absolute;right:7px;top:6px;border:0;background:transparent;color:#828b9e;font-size:18px;padding:3px}
+.card{
+  position:relative;
+  min-width:0;
+  min-height:155px;
+  text-align:left;
+  border:1px solid #39435a;
+  background:linear-gradient(145deg,#252d43,#171b29 65%,#29213d);
+  border-radius:16px;
+  padding:14px 11px;
+  color:white;
+  display:flex;
+  flex-direction:column;
+  gap:9px;
+  overflow:hidden;
+  box-shadow:0 5px 18px rgba(0,0,0,.16);
+  transition:transform .2s,border-color .2s;
+}
+.card:hover{
+  border-color:#a18cff;
+  transform:translateY(-2px);
+}
+.card-icon{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  height:76px;
+  border-radius:11px;
+  font-size:38px;
+  background:radial-gradient(circle at 50% 35%,#514477,#28243d 55%,#191e2c);
+}
+.card-name{
+  font-size:12px;
+  font-weight:750;
+  line-height:1.35;
+  padding-right:18px;
+}
+.card-meta{
+  font-size:9px;
+  color:#b8bfd1;
+  line-height:1.4;
+}
+.star{
+  position:absolute;
+  right:7px;
+  top:7px;
+  border:1px solid #ffffff20;
+  border-radius:9px;
+  background:#171b29cc;
+  color:#c5c9d6;
+  font-size:18px;
+  padding:3px 7px;
+  z-index:2;
+}
 .star.saved{color:#ffd76a}
+
 .count{font-size:11px;color:var(--muted);margin-top:12px}
 .empty-library{grid-column:1/-1;text-align:center;color:var(--muted);padding:25px 10px;font-size:12px}
 .safe{border:1px solid #315c4d;background:#14251f;border-radius:12px;padding:12px;margin-top:15px;color:#b8e7d2;font-size:11px;line-height:1.5}
