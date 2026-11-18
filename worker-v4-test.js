@@ -560,9 +560,26 @@ return filterOK && categoryOK && collectionOK && modelOK && searchOK;
     main.style.cssText=
       "border:0;background:transparent;color:inherit;text-align:left;padding:0;display:flex;flex-direction:column;gap:7px;flex:1";
 
-    const icon=document.createElement("span");
-    icon.className="card-icon";
-    icon.textContent=t.icon;
+
+const icon=document.createElement("span");
+icon.className="card-icon";
+
+const coverStyles={
+  portrait:"linear-gradient(145deg,#72568f,#34274d 60%,#171c2b)",
+  fashion:"linear-gradient(145deg,#a75c78,#542d54 60%,#211b30)",
+  travel:"linear-gradient(145deg,#348d9b,#24516e 60%,#17283b)",
+  business:"linear-gradient(145deg,#a28a58,#51452f 60%,#20212b)",
+  cars:"linear-gradient(145deg,#a94e45,#542d3a 60%,#1b1d2b)",
+  interiors:"linear-gradient(145deg,#9a866e,#5c5147 60%,#24232c)",
+  video:"linear-gradient(145deg,#6955a8,#382b67 60%,#191a30)"
+};
+
+icon.textContent=t.icon;
+icon.style.background=
+  coverStyles[t.category] ||
+  "linear-gradient(145deg,#514477,#28243d 60%,#191e2c)";
+
+icon.setAttribute("aria-label",t.categoryName+" — обложка");
 
     const name=document.createElement("span");
     name.className="card-name";
