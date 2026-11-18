@@ -614,7 +614,7 @@ name.textContent=t.name;
       " · "+t.categoryName+
       (modelText?" · "+modelText:"");
 
-    main.append(icon,name,meta);
+    main.append(icon,tag,name,meta);
 
     main.addEventListener("click",()=>{
       promptBox.value=t.prompt;
