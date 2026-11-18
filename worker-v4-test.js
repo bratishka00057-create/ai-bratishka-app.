@@ -602,7 +602,7 @@ const categoryCovers = {
     "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=600&q=80",
     "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=600&q=80",
     "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&q=80",
-    https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=600&q=80
+    "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=600&q=80"
   ],
 
   "portrait-women": [
@@ -643,7 +643,7 @@ const categoryCovers = {
     "https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&q=80",
     "https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=600&q=80",
     "https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=600&q=80",
-    https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=600&q=80
+    "https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=600&q=80"
   ],
 
   cars: [
