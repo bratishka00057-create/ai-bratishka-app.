@@ -318,7 +318,7 @@ ${userPrompt}
 
       // 7. Возвращаем результат фотостудии
       return Response.json(
-        { image: `data:image/png;base64,${imageBase64}` },
+{ image: imageBase64 },
         { headers }
       );
 
