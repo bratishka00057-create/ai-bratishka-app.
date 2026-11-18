@@ -157,6 +157,7 @@ const save=document.getElementById("save");
 let outputUrl="";
 let previewUrl="";
 let selectedMode="background";
+let currentModePrompt="";
 
 const modePrompts={
 background:"Замени только фон на роскошную современную локацию. Сохрани человека, лицо, волосы, одежду, позу и пропорции без изменений. Сделай реалистичное освещение и естественные края волос.",
@@ -170,9 +171,12 @@ creative:"Опиши свою идею. Укажи, что именно нужн
 document.querySelectorAll(".mode").forEach(btn=>btn.addEventListener("click",()=>{
 document.querySelectorAll(".mode").forEach(x=>x.classList.remove("active"));
 btn.classList.add("active");
+
 selectedMode=btn.dataset.mode;
-promptBox.placeholder=modePrompts[selectedMode];
-if(!promptBox.value.trim())promptBox.value=modePrompts[selectedMode];
+currentModePrompt=modePrompts[selectedMode];
+
+promptBox.placeholder=currentModePrompt;
+promptBox.value=currentModePrompt;
 }));
 
 document.querySelectorAll(".preset").forEach(btn=>btn.addEventListener("click",()=>{
