@@ -667,7 +667,12 @@ const categoryCovers = {
     "https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=600&q=80",
     "https://images.unsplash.com/photo-1492619375914-88005aa9e8fb?w=600&q=80",
     "https://images.unsplash.com/photo-1536240478700-b869070f9279?w=600&q=80",
-    "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=600&q=80"
+    "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=600&q=80",
+    "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=600&q=80",
+    "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=600&q=80",
+    "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=600&q=80",
+    "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=600&q=80",
+    "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&q=80"
   ]
 };
 
