@@ -149,6 +149,27 @@ button,input,textarea{font:inherit}button{cursor:pointer}
 .input,.search{width:100%;border:1px solid var(--line);border-radius:11px;background:#0e121a;color:white;padding:12px;font-size:13px;outline:none}
 .input:focus,.search:focus,.textarea:focus{border-color:var(--accent)}
 .categories{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:12px 0 16px}
+.collections{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:9px;
+  margin:12px 0 17px;
+}
+.collection{
+  min-height:82px;
+  padding:12px;
+  text-align:left;
+  color:white;
+  border:1px solid #394052;
+  border-radius:13px;
+  background:linear-gradient(145deg,#292441,#171c26);
+}
+.collection.active{
+  border-color:var(--accent);
+  background:linear-gradient(145deg,#403568,#242039);
+}
+.collection b{display:block;font-size:12px;margin-bottom:5px}
+.collection small{color:#b9bfd0;font-size:10px;line-height:1.4}
 .category{border:1px solid var(--line);background:#171c26;border-radius:12px;padding:11px 7px;color:white;font-size:11px}
 .category.active{border-color:var(--accent);background:#292441}
 .cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
@@ -232,6 +253,7 @@ button,input,textarea{font:inherit}button{cursor:pointer}
 
 <div class="head"><h2>Тематические подборки</h2><span class="hint">Выбери категорию</span></div>
 <div class="categories" id="categories"></div>
+<div class="collections" id="collections"></div>
 <div class="cards" id="cards"></div>
 <div class="count" id="count"></div>
 
@@ -317,6 +339,7 @@ const modelLabels={
   "seedance":"Seedance"
 };
 
+
 const categories=[
   ["all","Все","✦"],
   ["portrait","Портреты","✨"],
@@ -329,8 +352,88 @@ const categories=[
 ];
 
 const categoriesBox=document.getElementById("categories");
+const collectionsBox=document.getElementById("collections");
 const cardsBox=document.getElementById("cards");
 const countBox=document.getElementById("count");
+
+let activeCollection="all";
+
+const collections=[
+  {
+    id:"premium",
+    icon:"💎",
+    name:"Премиум",
+    description:"Роскошные образы и интерьеры",
+    categories:["portrait","fashion","business","interiors","cars"]
+  },
+  {
+    id:"social",
+    icon:"📱",
+    name:"Для соцсетей",
+    description:"Яркие фото для Reels и профиля",
+    categories:["portrait","fashion","travel"]
+  },
+  {
+    id:"cinematic",
+    icon:"🎬",
+    name:"Кинематограф",
+    description:"Атмосфера кино и эффектный свет",
+    categories:["video","portrait","cars","travel"]
+  },
+  {
+    id:"personal",
+    icon:"👔",
+    name:"Личный бренд",
+    description:"Портреты экспертов и бизнеса",
+    categories:["business","portrait"]
+  },
+  {
+    id:"travel",
+    icon:"🌍",
+    name:"Путешествия",
+    description:"Красивые места и новые локации",
+    categories:["travel"]
+  }
+];
+
+function updateCollectionButtons(){
+  collectionsBox.querySelectorAll(".collection").forEach(button=>{
+    button.classList.toggle(
+      "active",
+      button.dataset.collection===activeCollection
+    );
+  });
+}
+
+collections.forEach(item=>{
+  const button=document.createElement("button");
+  button.type="button";
+  button.className="collection";
+  button.dataset.collection=item.id;
+
+  button.innerHTML=
+    "<b>"+item.icon+" "+item.name+"</b>"+
+    "<small>"+item.description+"</small>";
+
+  button.addEventListener("click",()=>{
+    activeCollection=
+      activeCollection===item.id?"all":item.id;
+
+    activeCategory="all";
+
+    categoriesBox.querySelectorAll(".category").forEach(x=>{
+      x.classList.toggle(
+        "active",
+        x.dataset.category==="all"
+      );
+    });
+
+    updateCollectionButtons();
+    renderCards();
+  });
+
+  collectionsBox.appendChild(button);
+});
 
 categories.forEach(item=>{
   const button=document.createElement("button");
@@ -340,9 +443,13 @@ categories.forEach(item=>{
 
   button.addEventListener("click",()=>{
     activeCategory=item[0];
+    activeCollection="all";
+
     categoriesBox.querySelectorAll(".category").forEach(x=>{
       x.classList.toggle("active",x===button);
     });
+
+    updateCollectionButtons();
     renderCards();
   });
 
@@ -361,12 +468,20 @@ function renderCards(){
       (activeFilter==="new" && t.isNew) ||
       (activeFilter==="favorites" && favorites.has(t.id));
 
-    const categoryOK=
-      activeCategory==="all" || t.category===activeCategory;
+const categoryOK=
+  activeCategory==="all" || t.category===activeCategory;
 
-    const modelOK=
-      activeModel==="all" ||
-      (Array.isArray(t.models) && t.models.includes(activeModel));
+const selectedCollection=
+  collections.find(c=>c.id===activeCollection);
+
+const collectionOK=
+  activeCollection==="all" ||
+  (selectedCollection &&
+   selectedCollection.categories.includes(t.category));
+
+const modelOK=
+  activeModel==="all" ||
+  (Array.isArray(t.models) && t.models.includes(activeModel));
 
     const searchOK=
       !term ||
@@ -374,7 +489,7 @@ function renderCards(){
       (t.models||[]).map(m=>modelLabels[m]||m).join(" "))
       .toLowerCase().includes(term);
 
-    return filterOK && categoryOK && modelOK && searchOK;
+return filterOK && categoryOK && collectionOK && modelOK && searchOK;
   });
 
   cardsBox.replaceChildren();
