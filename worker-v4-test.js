@@ -40,6 +40,9 @@ img{width:100%;max-height:520px;object-fit:contain;border-radius:12px;margin-top
 <img id="preview">
 
 <label>Новый фон</label>
+<label>Код доступа для теста</label>
+
+<input id="accessCode" type="password" autocomplete="current-password" placeholder="Введи тестовый код">
 <textarea id="prompt" maxlength="1200" placeholder="Например: роскошный ночной город, красивые огни, кинематографический свет..."></textarea>
 
 <div class="hint">
@@ -63,6 +66,7 @@ if(tg){tg.ready();tg.expand();}
 
 const photo=document.getElementById("photo");
 const prompt=document.getElementById("prompt");
+const accessCode=document.getElementById("accessCode");
 const button=document.getElementById("go");
 const status=document.getElementById("status");
 const preview=document.getElementById("preview");
@@ -162,7 +166,6 @@ async function generate(){
  if(!file){status.textContent="Сначала выбери фотографию.";return;}
  const text=prompt.value.trim();
  if(!text){status.textContent="Опиши новый фон.";return;}
- if(!tg?.initData){status.textContent="Открой приложение через Telegram.";return;}
 
  button.disabled=true;
  share.style.display="none";
@@ -210,7 +213,7 @@ async function generate(){
    method:"POST",
    headers:{
     "Content-Type":"application/json",
-    "X-Telegram-Init-Data":tg.initData
+"X-V4-Test-Key":accessCode.value.trim()
    },
    body:JSON.stringify({prompt:text,width:w,height:h})
   });
@@ -286,7 +289,7 @@ export default {
 };
 
 async function createBackground(request,env){
- const auth=await checkTelegram(request,env);
+const auth=await checkV4TestKey(request,env);
  if(auth)return auth;
 
  if(!env.AI){
@@ -335,6 +338,29 @@ async function createBackground(request,env){
  }
 }
 
+async function checkV4TestKey(request,env){
+ const expected=env.V4_TEST_KEY;
+ const supplied=request.headers.get("X-V4-Test-Key")||"";
+
+ if(!expected){
+  return Response.json({error:"Не настроен тестовый ключ V4_TEST_KEY в Cloudflare"},{status:503});
+ }
+
+ if(!supplied||supplied.length!==expected.length){
+  return Response.json({error:"Неверный код доступа"},{status:401});
+ }
+
+ let difference=0;
+ for(let i=0;i<expected.length;i++){
+  difference|=expected.charCodeAt(i)^supplied.charCodeAt(i);
+ }
+
+ if(difference!==0){
+  return Response.json({error:"Неверный код доступа"},{status:401});
+ }
+
+ return null;
+}
 async function checkTelegram(request,env){
  if(!env.BOT_TOKEN){
   return Response.json({error:"Не настроен BOT_TOKEN"},{status:503});
