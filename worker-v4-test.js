@@ -1,4 +1,3 @@
-
 const MODEL = "gpt-image-2.6-sunburst";
 const MAX_FILE_SIZE = 15 * 1024 * 1024;
 
@@ -71,20 +70,31 @@ const VIDEO_TEMPLATES = [
 ];
 
 const TEMPLATES = [];
+
 for (const group of PHOTO_GROUPS) {
   const [category,categoryName,icon,items] = group;
-  items.forEach((item,index) => TEMPLATES.push({
-    id:category+"-"+index,
-    name:item[0],
-    category,
-    categoryName,
-    icon,
-    type:"photo",
-    popular:index===0 || index===3,
-    isNew:index>=items.length-2,
-    prompt:"Создай реалистичную профессиональную фотографию. "+item[1]+" Сохрани точную идентичность человека, лицо, возраст, черты, волосы и естественную текстуру кожи. Не меняй ничего, кроме явно запрошенного."
-  }));
+
+  items.forEach((item,index) => {
+    const recommendedModels =
+      category === "portrait" || category === "fashion"
+        ? ["nano-banana","flux"]
+        : ["flux","nano-banana"];
+
+    TEMPLATES.push({
+      id:category+"-"+index,
+      name:item[0],
+      category,
+      categoryName,
+      icon,
+      type:"photo",
+      models:recommendedModels,
+      popular:index===0 || index===3,
+      isNew:index>=items.length-2,
+      prompt:"Создай реалистичную профессиональную фотографию. "+item[1]+" Сохрани точную идентичность человека, лицо, возраст, черты, волосы и естественную текстуру кожи. Не меняй ничего, кроме явно запрошенного."
+    });
+  });
 }
+
 VIDEO_TEMPLATES.forEach((item,index) => TEMPLATES.push({
   id:"video-"+index,
   name:item[0],
@@ -92,10 +102,19 @@ VIDEO_TEMPLATES.forEach((item,index) => TEMPLATES.push({
   categoryName:"Видео",
   icon:"🎬",
   type:"video",
+  models:["kling","wan","seedance"],
   popular:index<2,
   isNew:index>=8,
   prompt:"СЦЕНАРИЙ ВИДЕО. "+item[1]+" Подготовь подробное описание движения камеры, освещения, последовательности кадров и атмосферы. Это сценарий, а не запуск генерации видео."
 }));
+
+const MODEL_LABELS = {
+  "nano-banana":"Nano Banana",
+  "flux":"FLUX",
+  "kling":"Kling",
+  "wan":"Wan",
+  "seedance":"Seedance"
+};
 
 const HTML = `<!DOCTYPE html>
 <html lang="ru">
@@ -173,7 +192,7 @@ button,input,textarea{font:inherit}button{cursor:pointer}
 <div class="shell">
 <header class="top">
 <div class="brand"><div class="logo">✦</div><div><b>AI BRATISHKA</b><small>STUDIO · IMAGE LAB</small></div></div>
-<div class="pill">V4 · TEST MODE</div>
+<div class="pill">V4.1 · TEST MODE</div>
 </header>
 
 <section class="hero">
@@ -183,25 +202,42 @@ button,input,textarea{font:inherit}button{cursor:pointer}
 </section>
 
 <section class="panel library">
-<div class="head"><h2>✦ Тренды и шаблоны</h2><span class="pill">50 ИДЕЙ</span></div>
-<p class="hint">Готовые сценарии для фотографий и будущих видеопроектов</p>
+<div class="head"><h2>✦ Библиотека идей и шаблонов</h2><span class="pill">50 ИДЕЙ</span></div>
+<p class="hint">Подборки для фотографий и видеопроектов</p>
+
 <div class="filters" id="filters">
 <button class="filter active" data-filter="all">Все</button>
 <button class="filter" data-filter="photo">📸 Фото</button>
 <button class="filter" data-filter="video">🎬 Видео</button>
 <button class="filter" data-filter="popular">🔥 Популярное</button>
-<button class="filter" data-filter="new">🆕 Новинки</button>
+<button class="filter" data-filter="new">🆕 Новые идеи</button>
 <button class="filter" data-filter="favorites">♥ Избранное</button>
 </div>
+
+<div class="head" style="margin-top:17px"><h2>Модель или направление</h2></div>
+<div class="filters" id="modelFilters">
+<button class="filter active" data-model="all">Все модели</button>
+<button class="filter" data-model="nano-banana">Nano Banana</button>
+<button class="filter" data-model="flux">FLUX</button>
+<button class="filter" data-model="kling">Kling</button>
+<button class="filter" data-model="wan">Wan</button>
+<button class="filter" data-model="seedance">Seedance</button>
+</div>
+
 <div class="tools">
 <input id="librarySearch" class="search" type="search" placeholder="Поиск шаблона...">
 <button id="clearSearch" class="filter">Сбросить</button>
 </div>
-<div class="head"><h2>Категории</h2><span class="hint">Выбери подборку</span></div>
+
+<div class="head"><h2>Тематические подборки</h2><span class="hint">Выбери категорию</span></div>
 <div class="categories" id="categories"></div>
 <div class="cards" id="cards"></div>
 <div class="count" id="count"></div>
-<div class="safe"><b>ℹ️ О библиотеке</b>Видеошаблоны пока являются сценариями, а не генерацией видео. Автоматическое обновление трендов подключим отдельно после настройки источников.</div>
+
+<div class="safe">
+<b>ℹ️ Важная информация</b>
+Модели в карточках — рекомендации, а не подключённые генераторы. Видеокарточки — сценарии, генерация видео пока не подключена. Список идей пока редакционный, не автоматическая лента актуальных трендов.
+</div>
 </section>
 
 <div class="layout">
@@ -245,9 +281,8 @@ button,input,textarea{font:inherit}button{cursor:pointer}
 <div class="safe"><b>🔒 Безопасный тестовый режим</b>Платная обработка выключена на сервере. Пока защита активна, запросы к платной модели не отправляются и списаний нет.</div>
 </aside>
 </div>
-<div class="footer">AI BRATISHKA STUDIO · V4 TEST BUILD</div>
+<div class="footer">AI BRATISHKA STUDIO · V4.1 TEST BUILD</div>
 </div>
-
 <script>
 const photo=document.getElementById("photo");
 const promptBox=document.getElementById("prompt");
@@ -259,10 +294,12 @@ const preview=document.getElementById("preview");
 const empty=document.getElementById("empty");
 const save=document.getElementById("save");
 const search=document.getElementById("librarySearch");
+
 let outputUrl="";
 let previewUrl="";
 let activeFilter="all";
 let activeCategory="all";
+let activeModel="all";
 let favorites=new Set();
 
 try{
@@ -270,6 +307,14 @@ try{
 }catch(e){}
 
 const templates=__TEMPLATES__;
+
+const modelLabels={
+  "nano-banana":"Nano Banana",
+  "flux":"FLUX",
+  "kling":"Kling",
+  "wan":"Wan",
+  "seedance":"Seedance"
+};
 
 const categories=[
   ["all","Все","✦"],
@@ -291,16 +336,21 @@ categories.forEach(item=>{
   button.className="category"+(item[0]==="all"?" active":"");
   button.textContent=item[2]+" "+item[1];
   button.dataset.category=item[0];
+
   button.addEventListener("click",()=>{
     activeCategory=item[0];
-    categoriesBox.querySelectorAll(".category").forEach(x=>x.classList.toggle("active",x===button));
+    categoriesBox.querySelectorAll(".category").forEach(x=>{
+      x.classList.toggle("active",x===button);
+    });
     renderCards();
   });
+
   categoriesBox.appendChild(button);
 });
 
 function renderCards(){
   const term=search.value.trim().toLowerCase();
+
   const shown=templates.filter(t=>{
     const filterOK=
       activeFilter==="all" ||
@@ -309,9 +359,21 @@ function renderCards(){
       (activeFilter==="popular" && t.popular) ||
       (activeFilter==="new" && t.isNew) ||
       (activeFilter==="favorites" && favorites.has(t.id));
-    const categoryOK=activeCategory==="all" || t.category===activeCategory;
-    const searchOK=!term || (t.name+" "+t.categoryName+" "+t.prompt).toLowerCase().includes(term);
-    return filterOK && categoryOK && searchOK;
+
+    const categoryOK=
+      activeCategory==="all" || t.category===activeCategory;
+
+    const modelOK=
+      activeModel==="all" ||
+      (Array.isArray(t.models) && t.models.includes(activeModel));
+
+    const searchOK=
+      !term ||
+      (t.name+" "+t.categoryName+" "+t.prompt+" "+
+      (t.models||[]).map(m=>modelLabels[m]||m).join(" "))
+      .toLowerCase().includes(term);
+
+    return filterOK && categoryOK && modelOK && searchOK;
   });
 
   cardsBox.replaceChildren();
@@ -329,22 +391,43 @@ function renderCards(){
 
     const main=document.createElement("button");
     main.type="button";
-    main.style.cssText="border:0;background:transparent;color:inherit;text-align:left;padding:0;display:flex;flex-direction:column;gap:7px;flex:1";
+    main.style.cssText=
+      "border:0;background:transparent;color:inherit;text-align:left;padding:0;display:flex;flex-direction:column;gap:7px;flex:1";
+
     const icon=document.createElement("span");
     icon.className="card-icon";
     icon.textContent=t.icon;
+
     const name=document.createElement("span");
     name.className="card-name";
     name.textContent=t.name;
+
     const meta=document.createElement("span");
     meta.className="card-meta";
-    meta.textContent=(t.type==="photo"?"ФОТО":"ВИДЕО · СЦЕНАРИЙ")+" · "+t.categoryName;
+
+    const modelText=(t.models||[])
+      .map(m=>modelLabels[m]||m)
+      .join(" · ");
+
+    meta.textContent=
+      (t.type==="photo"?"ФОТО":"ВИДЕО · СЦЕНАРИЙ")+
+      " · "+t.categoryName+
+      (modelText?" · "+modelText:"");
+
     main.append(icon,name,meta);
+
     main.addEventListener("click",()=>{
       promptBox.value=t.prompt;
       promptBox.focus();
-      statusBox.textContent="Шаблон «"+t.name+"» выбран. Можно уточнить задание.";
-      document.querySelector(".layout").scrollIntoView({behavior:"smooth",block:"start"});
+
+      statusBox.textContent=
+        "Шаблон «"+t.name+"» выбран. Рекомендация по моделям: "+
+        modelText+". Это не означает, что эти модели подключены.";
+
+      document.querySelector(".layout").scrollIntoView({
+        behavior:"smooth",
+        block:"start"
+      });
     });
 
     const star=document.createElement("button");
@@ -352,10 +435,21 @@ function renderCards(){
     star.className="star"+(favorites.has(t.id)?" saved":"");
     star.textContent=favorites.has(t.id)?"★":"☆";
     star.setAttribute("aria-label","Добавить в избранное");
+
     star.addEventListener("click",()=>{
-      if(favorites.has(t.id))favorites.delete(t.id);
-      else favorites.add(t.id);
-      try{localStorage.setItem("bratishka-favorites-v4",JSON.stringify([...favorites]));}catch(e){}
+      if(favorites.has(t.id)){
+        favorites.delete(t.id);
+      }else{
+        favorites.add(t.id);
+      }
+
+      try{
+        localStorage.setItem(
+          "bratishka-favorites-v4",
+          JSON.stringify([...favorites])
+        );
+      }catch(e){}
+
       renderCards();
     });
 
@@ -363,70 +457,123 @@ function renderCards(){
     cardsBox.appendChild(card);
   });
 
-  countBox.textContent="Показано шаблонов: "+shown.length+" из "+templates.length;
+  countBox.textContent=
+    "Показано шаблонов: "+shown.length+" из "+templates.length;
 }
 
 document.querySelectorAll("[data-filter]").forEach(button=>{
   button.addEventListener("click",()=>{
     activeFilter=button.dataset.filter;
-    document.querySelectorAll("[data-filter]").forEach(x=>x.classList.toggle("active",x===button));
+
+    document.querySelectorAll("[data-filter]").forEach(x=>{
+      x.classList.toggle("active",x===button);
+    });
+
+    renderCards();
+  });
+});
+
+document.querySelectorAll("[data-model]").forEach(button=>{
+  button.addEventListener("click",()=>{
+    activeModel=button.dataset.model;
+
+    document.querySelectorAll("[data-model]").forEach(x=>{
+      x.classList.toggle("active",x===button);
+    });
+
     renderCards();
   });
 });
 
 search.addEventListener("input",renderCards);
+
 document.getElementById("clearSearch").addEventListener("click",()=>{
   search.value="";
   activeFilter="all";
   activeCategory="all";
-  document.querySelectorAll("[data-filter]").forEach(x=>x.classList.toggle("active",x.dataset.filter==="all"));
-  categoriesBox.querySelectorAll(".category").forEach(x=>x.classList.toggle("active",x.dataset.category==="all"));
+  activeModel="all";
+
+  document.querySelectorAll("[data-filter]").forEach(x=>{
+    x.classList.toggle("active",x.dataset.filter==="all");
+  });
+
+  document.querySelectorAll("[data-model]").forEach(x=>{
+    x.classList.toggle("active",x.dataset.model==="all");
+  });
+
+  categoriesBox.querySelectorAll(".category").forEach(x=>{
+    x.classList.toggle("active",x.dataset.category==="all");
+  });
+
   renderCards();
 });
 
 renderCards();
 
 const modePrompts={
-background:"Замени только фон на выбранную локацию. Сохрани человека, лицо, волосы, одежду, позу и пропорции без изменений. Сделай освещение и тени реалистичными.",
-portrait:"Создай профессиональный портрет с мягким объёмным светом. Сохрани точную идентичность лица, возраст, черты и естественную текстуру кожи.",
-retouch:"Выполни деликатную профессиональную ретушь. Сохрани индивидуальные черты лица, поры и естественную текстуру кожи.",
-fashion:"Создай стильный fashion-образ с профессиональной журнальной подачей. Сохрани идентичность человека.",
-studio:"Преврати снимок в профессиональную фотосессию с тщательно выстроенным светом и выразительной композицией.",
-creative:"Опиши свою идею. Укажи, что именно нужно изменить и какие детали фотографии должны остаться нетронутыми."
+  background:"Замени только фон на выбранную локацию. Сохрани человека, лицо, волосы, одежду, позу и пропорции без изменений. Сделай освещение и тени реалистичными.",
+  portrait:"Создай профессиональный портрет с мягким объёмным светом. Сохрани точную идентичность лица, возраст, черты и естественную текстуру кожи.",
+  retouch:"Выполни деликатную профессиональную ретушь. Сохрани индивидуальные черты лица, поры и естественную текстуру кожи.",
+  fashion:"Создай стильный fashion-образ с профессиональной журнальной подачей. Сохрани идентичность человека.",
+  studio:"Преврати снимок в профессиональную фотосессию с тщательно выстроенным светом и выразительной композицией.",
+  creative:"Опиши свою идею. Укажи, что именно нужно изменить и какие детали фотографии должны остаться нетронутыми."
 };
 
 document.querySelectorAll("#modes .mode").forEach(btn=>{
   btn.addEventListener("click",()=>{
-    document.querySelectorAll("#modes .mode").forEach(x=>x.classList.toggle("active",x===btn));
+    document.querySelectorAll("#modes .mode").forEach(x=>{
+      x.classList.toggle("active",x===btn);
+    });
+
     promptBox.value=modePrompts[btn.dataset.mode];
   });
 });
 
 document.querySelectorAll(".preset").forEach(btn=>{
-  btn.addEventListener("click",()=>{promptBox.value=btn.dataset.prompt;});
+  btn.addEventListener("click",()=>{
+    promptBox.value=btn.dataset.prompt;
+  });
 });
 
 photo.addEventListener("change",()=>{
   const file=photo.files[0];
   if(!file)return;
+
   if(file.size>15*1024*1024){
-    statusBox.textContent="Файл больше 15 МБ. Выбери фотографию до 15 МБ.";
+    statusBox.textContent=
+      "Файл больше 15 МБ. Выбери фотографию до 15 МБ.";
     photo.value="";
     return;
   }
+
   if(previewUrl)URL.revokeObjectURL(previewUrl);
+
   previewUrl=URL.createObjectURL(file);
   preview.src=previewUrl;
   preview.style.display="block";
-  statusBox.textContent="Фотография загружена. Выбери режим и уточни задачу.";
+
+  statusBox.textContent=
+    "Фотография загружена. Выбери режим и уточни задачу.";
 });
 
 run.onclick=async()=>{
   const file=photo.files[0];
   const prompt=promptBox.value.trim();
-  if(!file){statusBox.textContent="Сначала выбери фотографию.";return;}
-  if(!prompt){statusBox.textContent="Опиши желаемый результат.";return;}
-  if(!access.value.trim()){statusBox.textContent="Введи тестовый код доступа.";return;}
+
+  if(!file){
+    statusBox.textContent="Сначала выбери фотографию.";
+    return;
+  }
+
+  if(!prompt){
+    statusBox.textContent="Опиши желаемый результат.";
+    return;
+  }
+
+  if(!access.value.trim()){
+    statusBox.textContent="Введи тестовый код доступа.";
+    return;
+  }
 
   run.disabled=true;
   statusBox.textContent="Проверяю настройки безопасного режима...";
@@ -438,22 +585,35 @@ run.onclick=async()=>{
     const data=new FormData();
     data.append("image",file);
     data.append("prompt",prompt);
+
     const response=await fetch("/api/edit",{
       method:"POST",
       headers:{"X-V4-Test-Key":access.value.trim()},
       body:data
     });
+
     const answer=await response.json();
-    if(!response.ok)throw new Error(answer.error||"Ошибка обработки");
-    const bytes=Uint8Array.from(atob(answer.image),c=>c.charCodeAt(0));
+
+    if(!response.ok){
+      throw new Error(answer.error||"Ошибка обработки");
+    }
+
+    const bytes=Uint8Array.from(
+      atob(answer.image),
+      c=>c.charCodeAt(0)
+    );
+
     const blob=new Blob([bytes],{type:"image/png"});
+
     if(outputUrl)URL.revokeObjectURL(outputUrl);
+
     outputUrl=URL.createObjectURL(blob);
     result.src=outputUrl;
     result.style.display="block";
     empty.style.display="none";
     save.style.display="block";
     statusBox.textContent="Готово!";
+
   }catch(e){
     statusBox.textContent="Ошибка: "+e.message;
   }finally{
@@ -463,6 +623,7 @@ run.onclick=async()=>{
 
 save.onclick=()=>{
   if(!outputUrl)return;
+
   const a=document.createElement("a");
   a.href=outputUrl;
   a.download="AI-Bratishka-Studio.png";
@@ -471,7 +632,6 @@ save.onclick=()=>{
 </script>
 </body>
 </html>`;
-
 function makeHTML(){
   return HTML.replace("__TEMPLATES__",JSON.stringify(TEMPLATES));
 }
@@ -485,72 +645,124 @@ export default {
     };
 
     if(request.method==="GET" && url.pathname==="/"){
-      return new Response("AI Bratishka Studio V4 is running",{
-        headers:{...headers,"Content-Type":"text/plain; charset=utf-8"}
+      return new Response("AI Bratishka Studio V4.1 is running",{
+        headers:{
+          ...headers,
+          "Content-Type":"text/plain; charset=utf-8"
+        }
       });
     }
 
     if(request.method==="GET" && url.pathname==="/app"){
       return new Response(makeHTML(),{
-        headers:{...headers,"Content-Type":"text/html; charset=utf-8"}
+        headers:{
+          ...headers,
+          "Content-Type":"text/html; charset=utf-8"
+        }
       });
     }
 
     if(request.method!=="POST" || url.pathname!=="/api/edit"){
-      return Response.json({error:"Страница не найдена."},{status:404,headers});
+      return Response.json(
+        {error:"Страница не найдена."},
+        {status:404,headers}
+      );
     }
 
     try{
       const expectedKey=env.V4_TEST_KEY||"";
       const suppliedKey=request.headers.get("X-V4-Test-Key")||"";
 
-      let keyMatches=expectedKey.length>0 && expectedKey.length===suppliedKey.length;
+      let keyMatches=
+        expectedKey.length>0 &&
+        expectedKey.length===suppliedKey.length;
+
       if(keyMatches){
         let difference=0;
+
         for(let i=0;i<expectedKey.length;i++){
-          difference|=expectedKey.charCodeAt(i)^suppliedKey.charCodeAt(i);
+          difference|=
+            expectedKey.charCodeAt(i)^
+            suppliedKey.charCodeAt(i);
         }
+
         keyMatches=difference===0;
       }
 
       if(!keyMatches){
-        return Response.json({error:"Неверный тестовый код доступа."},{status:401,headers});
+        return Response.json(
+          {error:"Неверный тестовый код доступа."},
+          {status:401,headers}
+        );
       }
 
-      // Платная обработка выключена. Не включать без отдельного согласования.
+      // Платная обработка выключена.
+      // Запросы к платным API не отправляются.
       if(env.ENABLE_PAID_IMAGE_API!=="true"){
         return Response.json({
           error:"Платная обработка выключена. Запрос к OpenAI не отправлялся и списаний нет."
-        },{status:403,headers});
+        },{
+          status:403,
+          headers
+        });
       }
 
+      // Этот участок не будет достигнут,
+      // пока платная обработка выключена.
       if(!env.OPENAI_API_KEY){
-        return Response.json({error:"API-ключ не настроен."},{status:503,headers});
+        return Response.json(
+          {error:"API-ключ не настроен."},
+          {status:503,headers}
+        );
       }
 
       if(!request.headers.get("Content-Type")?.includes("multipart/form-data")){
-        return Response.json({error:"Неверный формат запроса."},{status:400,headers});
+        return Response.json(
+          {error:"Неверный формат запроса."},
+          {status:400,headers}
+        );
       }
 
       const form=await request.formData();
-      const image=form.get("image");
+      const photo=form.get("image");
       const userPrompt=String(form.get("prompt")||"").trim();
 
-      if(!image || typeof image!=="object" || typeof image.arrayBuffer!=="function"){
-        return Response.json({error:"Загрузи фотографию."},{status:400,headers});
+      if(
+        !photo ||
+        typeof photo!=="object" ||
+        typeof photo.arrayBuffer!=="function"
+      ){
+        return Response.json(
+          {error:"Загрузи фотографию."},
+          {status:400,headers}
+        );
       }
 
-      const allowedTypes=["image/jpeg","image/png","image/webp"];
-      if(!allowedTypes.includes(image.type)){
-        return Response.json({error:"Поддерживаются только JPG, PNG и WebP."},{status:400,headers});
+      const allowedTypes=[
+        "image/jpeg",
+        "image/png",
+        "image/webp"
+      ];
+
+      if(!allowedTypes.includes(photo.type)){
+        return Response.json(
+          {error:"Поддерживаются только JPG, PNG и WebP."},
+          {status:400,headers}
+        );
       }
 
-      if(image.size>MAX_FILE_SIZE){
-        return Response.json({error:"Размер фотографии не должен превышать 15 МБ."},{status:413,headers});
+      if(photo.size>MAX_FILE_SIZE){
+        return Response.json(
+          {error:"Размер фотографии не должен превышать 15 МБ."},
+          {status:413,headers}
+        );
       }
 
       if(userPrompt.length<5 || userPrompt.length>4000){
-        return Response.json({error:"Описание должно содержать от 5 до 4000 символов."},{status:400,headers});
+        return Response.json(
+          {error:"Описание должно содержать от 5 до 4000 символов."},
+          {status:400,headers}
+        );
       }
 
       const professionalPrompt=`
@@ -561,14 +773,17 @@ expression, skin tone, apparent age, hairstyle and distinctive features.
 Preserve body proportions, pose, clothing and accessories unless explicitly
 asked to change them.
 
-Create a coherent, natural-looking photograph. Match lighting direction,
-exposure, color temperature, perspective, depth of field, reflections and shadows.
-Maintain realistic textures and natural transitions.
-Avoid cutout edges, halos, distorted anatomy, duplicated objects and plastic skin.
+Create a coherent, natural-looking professional photograph.
+Match lighting direction, exposure, color temperature, perspective,
+depth of field, reflections and shadows.
 
-When changing the background, make the new environment look as though the
-original photograph was genuinely taken there. Ensure consistent lighting,
-perspective, color and depth.
+Maintain realistic textures and natural transitions.
+Avoid cutout edges, halos, distorted anatomy, duplicated objects
+and artificial-looking skin.
+
+When changing the background, make the new environment look as though
+the original photograph was genuinely taken there.
+Ensure consistent lighting, perspective, color and depth.
 
 Do not redesign the person's face or replace the person with someone else.
 Do not make unrelated changes.
@@ -578,48 +793,84 @@ ${userPrompt}
       `.trim();
 
       const apiForm=new FormData();
+
       apiForm.append("model",MODEL);
-      apiForm.append("image[]",image,image.name||"photo.jpg");
+      apiForm.append(
+        "image[]",
+        photo,
+        photo.name||"photo.jpg"
+      );
       apiForm.append("prompt",professionalPrompt);
       apiForm.append("quality","max");
       apiForm.append("output_format","png");
 
-      const apiResponse=await fetch("https://api.openai.com/v1/images/edits",{
-        method:"POST",
-        headers:{"Authorization":`Bearer ${env.OPENAI_API_KEY}`},
-        body:apiForm
-      });
+      const apiResponse=await fetch(
+        "https://api.openai.com/v1/images/edits",
+        {
+          method:"POST",
+          headers:{
+            "Authorization":`Bearer ${env.OPENAI_API_KEY}`
+          },
+          body:apiForm
+        }
+      );
 
       if(!apiResponse.ok){
-        let errorMessage="Сервис обработки изображения временно недоступен.";
+        let errorMessage=
+          "Сервис обработки изображения временно недоступен.";
+
         try{
           const errorData=await apiResponse.json();
           const code=errorData?.error?.code;
+
           if(code==="insufficient_quota"){
-            errorMessage="На API-аккаунте недостаточно средств или доступной квоты.";
+            errorMessage=
+              "На API-аккаунте недостаточно средств или доступной квоты.";
           }else if(code==="invalid_api_key"){
-            errorMessage="API-ключ не принят. Проверь настройки доступа.";
+            errorMessage=
+              "API-ключ не принят. Проверь настройки доступа.";
           }else if(apiResponse.status===429){
-            errorMessage="Слишком много запросов. Попробуй позже.";
+            errorMessage=
+              "Слишком много запросов. Попробуй позже.";
           }
-        }catch(e){}
-        console.error("Image API error status:",apiResponse.status);
-        return Response.json({error:errorMessage},{status:502,headers});
+        }catch(error){}
+
+        console.error(
+          "Image API error status:",
+          apiResponse.status
+        );
+
+        return Response.json(
+          {error:errorMessage},
+          {status:502,headers}
+        );
       }
 
       const result=await apiResponse.json();
       const imageBase64=result?.data?.[0]?.b64_json;
 
       if(!imageBase64){
-        return Response.json({error:"Модель не вернула готовое изображение."},{status:502,headers});
+        return Response.json(
+          {error:"Модель не вернула готовое изображение."},
+          {status:502,headers}
+        );
       }
 
-      return Response.json({image:imageBase64},{headers});
+      return Response.json(
+        {image:imageBase64},
+        {headers}
+      );
+
     }catch(error){
-      console.error("Studio V4 error:",error?.message||"Unknown error");
-      return Response.json({
-        error:"Не удалось обработать фотографию. Попробуй ещё раз."
-      },{status:500,headers});
+      console.error(
+        "Studio V4.1 error:",
+        error?.message||"Unknown error"
+      );
+
+      return Response.json(
+        {error:"Внутренняя ошибка сервера."},
+        {status:500,headers}
+      );
     }
   }
 };
