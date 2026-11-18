@@ -587,10 +587,29 @@ const coverStyles={
   video:"linear-gradient(145deg,#6955a8,#382b67 60%,#191a30)"
 };
 
-icon.textContent=t.icon;
-icon.style.background=
-  coverStyles[t.category] ||
-  "linear-gradient(145deg,#514477,#28243d 60%,#191e2c)";
+const portraitCovers=[
+  "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=600&q=80",
+  "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&q=80",
+  "https://images.unsplash.com/photo-1554151228-14d9def656e4?w=600&q=80",
+  "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=600&q=80"
+];
+
+if(t.category==="portrait"){
+  const portraitIndex=
+    Number(t.id.split("-").pop())%portraitCovers.length;
+
+  icon.style.backgroundImage=
+    'url("'+portraitCovers[portraitIndex]+'")';
+  icon.style.backgroundSize="cover";
+  icon.style.backgroundPosition="center 35%";
+  icon.style.backgroundRepeat="no-repeat";
+  icon.textContent="";
+}else{
+  icon.textContent=t.icon;
+  icon.style.background=
+    coverStyles[t.category] ||
+    "linear-gradient(145deg,#514477,#28243d 60%,#191e2c)";
+}
 
 icon.setAttribute("aria-label",t.categoryName+" — обложка");
 
