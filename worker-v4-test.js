@@ -2,18 +2,31 @@ const MODEL = "gpt-image-2.6-sunburst";
 const MAX_FILE_SIZE = 15 * 1024 * 1024;
 
 const PHOTO_GROUPS = [
-  ["portrait","Портреты","✨",[
-    ["Портрет в студии","Профессиональный студийный портрет с мягким объёмным светом, естественной кожей и точным сохранением внешности человека."],
-    ["Обложка журнала","Редакционная портретная фотография уровня глянцевого журнала, выразительная композиция и премиальный свет."],
-    ["Кинопортрет","Кинематографичный портрет с атмосферным освещением, глубиной кадра и реалистичной цветокоррекцией."],
-    ["Золотой час","Портрет при мягком свете золотого часа, тёплые оттенки и естественные тени."],
-    ["Чёрно-белый портрет","Художественный чёрно-белый портрет с глубокими полутонами и профессиональным студийным светом."],
-    ["Портрет на улице","Реалистичный уличный портрет с красивым городским фоном и естественной глубиной резкости."],
-    ["Премиальный портрет","Дорогой портрет для профессионального профиля, элегантный свет и чистая композиция."],
-    ["Портрет у окна","Атмосферный портрет возле большого окна с мягким естественным светом."],
-    ["Тёмный фон","Выразительный портрет на глубоком тёмном фоне с объёмным контровым светом."],
-    ["Естественная ретушь","Деликатная профессиональная ретушь с сохранением пор, текстуры кожи и индивидуальных черт лица."]
+["portrait-men","Мужские портреты","👨",[
+    ["Мужской студийный портрет","Профессиональный мужской портрет в студии, мягкий объёмный свет, естественная кожа."],
+    ["Мужская обложка журнала","Редакционный мужской портрет для обложки премиального журнала."],
+    ["Мужской кинопортрет","Кинематографичный мужской портрет с выразительным светом и глубиной кадра."],
+    ["Мужской портрет на закате","Портрет мужчины в мягком золотом свете заката."],
+    ["Чёрно-белый мужской портрет","Стильный чёрно-белый мужской портрет с глубокими полутонами."],
+    ["Мужской street style","Современный городской мужской портрет в естественной обстановке."],
+    ["Мужской премиум","Элегантный мужской портрет в дорогой интерьерной атмосфере."],
+    ["Мужской портрет у окна","Атмосферный портрет мужчины с мягким естественным светом."],
+    ["Тёмный фон — мужчина","Выразительный мужской портрет на тёмном фоне с контровым светом."],
+    ["Деловой мужской портрет","Профессиональный портрет мужчины для бизнеса и личного бренда."]
   ]],
+  ["portrait-women","Женские портреты","👩",[
+    ["Женский студийный портрет","Профессиональный женский портрет в студии, мягкий объёмный свет, естественная кожа."],
+    ["Женская обложка журнала","Редакционный женский портрет для обложки премиального журнала."],
+    ["Женский кинопортрет","Кинематографичный женский портрет с выразительным светом и глубиной кадра."],
+    ["Женский портрет на закате","Портрет женщины в мягком золотом свете заката."],
+    ["Чёрно-белый женский портрет","Стильный чёрно-белый женский портрет с глубокими полутонами."],
+    ["Женский beauty-портрет","Профессиональная beauty-фотография с деликатной ретушью."],
+    ["Женский премиум","Элегантный женский портрет в дорогой интерьерной атмосфере."],
+    ["Женский портрет у окна","Атмосферный портрет женщины с мягким естественным светом."],
+    ["Тёмный фон — женщина","Выразительный женский портрет на тёмном фоне с контровым светом."],
+    ["Женский fashion-портрет","Премиальный fashion-портрет в стиле глянцевого журнала."]
+  ]],
+
   ["fashion","Мода","👗",[
     ["Fashion editorial","Профессиональная fashion editorial фотография для модного журнала."],
     ["Уличная мода","Реалистичная фотография в стиле street fashion с современной городской атмосферой."],
@@ -76,10 +89,10 @@ for (const group of PHOTO_GROUPS) {
 
   items.forEach((item,index) => {
     
-    const recommendedModels =
-      category === "portrait" || category === "fashion"
-        ? ["nano-banana"]
-        : ["flux"];
+const recommendedModels =
+  category.startsWith("portrait") || category === "fashion"
+    ? ["nano-banana"]
+    : ["flux"];
 
     TEMPLATES.push({
       id:category+"-"+index,
@@ -402,10 +415,10 @@ const modelLabels={
   "seedance":"Seedance"
 };
 
-
 const categories=[
   ["all","Все","✦"],
-  ["portrait","Портреты","✨"],
+  ["portrait-men","Мужские портреты","👨"],
+  ["portrait-women","Женские портреты","👩"],
   ["fashion","Мода","👗"],
   ["travel","Путешествия","🌍"],
   ["business","Бизнес","💼"],
@@ -427,28 +440,28 @@ const collections=[
     icon:"💎",
     name:"Премиум",
     description:"Роскошные образы и интерьеры",
-    categories:["portrait","fashion","business","interiors","cars"]
+    categories:["portrait-men","portrait-women","fashion","business","interiors","cars"]
   },
   {
     id:"social",
     icon:"📱",
     name:"Для соцсетей",
     description:"Яркие фото для Reels и профиля",
-    categories:["portrait","fashion","travel"]
+    categories:["portrait-men","portrait-women","fashion","travel"]
   },
   {
     id:"cinematic",
     icon:"🎬",
     name:"Кинематограф",
     description:"Атмосфера кино и эффектный свет",
-    categories:["video","portrait","cars","travel"]
+    categories:["video","portrait-men","portrait-women","cars","travel"]
   },
   {
     id:"personal",
     icon:"👔",
     name:"Личный бренд",
     description:"Портреты экспертов и бизнеса",
-    categories:["business","portrait"]
+    categories:["business","portrait-men","portrait-women"]
   },
   {
     id:"travel",
@@ -578,7 +591,8 @@ const icon=document.createElement("span");
 icon.className="card-icon";
 
 const coverStyles={
-  portrait:"linear-gradient(145deg,#72568f,#34274d 60%,#171c2b)",
+  "portrait-men":"linear-gradient(145deg,#405b83,#26344e 60%,#171c2b)",
+"portrait-women":"linear-gradient(145deg,#a75c78,#542d54 60%,#211b30)",
   fashion:"linear-gradient(145deg,#a75c78,#542d54 60%,#211b30)",
   travel:"linear-gradient(145deg,#348d9b,#24516e 60%,#17283b)",
   business:"linear-gradient(145deg,#a28a58,#51452f 60%,#20212b)",
@@ -587,29 +601,37 @@ const coverStyles={
   video:"linear-gradient(145deg,#6955a8,#382b67 60%,#191a30)"
 };
 
-const portraitCovers=[
-  "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=600&q=80",
-  "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&q=80",
-  "https://images.unsplash.com/photo-1554151228-14d9def656e4?w=600&q=80",
+const malePortraitCovers=[
   "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=600&q=80",
   "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600&q=80",
   "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&q=80",
-  "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=600&q=80",
-  "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=600&q=80",
-  "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=600&q=80",
-  "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=600&q=80"
+  "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80",
+  "https://images.unsplash.com/photo-1507591064344-4c6ce005b128?w=600&q=80"
 ];
 
-if(t.category==="portrait"){
+const femalePortraitCovers=[
+  "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=600&q=80",
+  "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&q=80",
+  "https://images.unsplash.com/photo-1554151228-14d9def656e4?w=600&q=80",
+  "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=600&q=80",
+  "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=600&q=80"
+];
+
+if(t.category==="portrait-men" || t.category==="portrait-women"){
+  const covers=t.category==="portrait-men"
+    ? malePortraitCovers
+    : femalePortraitCovers;
+
   const portraitIndex=
-    Number(t.id.split("-").pop())%portraitCovers.length;
+    Number(t.id.split("-").pop())%covers.length;
 
   icon.style.backgroundImage=
-    'url("'+portraitCovers[portraitIndex]+'")';
+    'url("'+covers[portraitIndex]+'")';
   icon.style.backgroundSize="cover";
   icon.style.backgroundPosition="center 35%";
   icon.style.backgroundRepeat="no-repeat";
   icon.textContent="";
+
 }else{
   icon.textContent=t.icon;
   icon.style.background=
