@@ -604,7 +604,7 @@ const coverStyles={
 const malePortraitCovers=[
   "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=600&q=80",
   "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600&q=80",
-  "https://images.unsplash.com/photo-1531384441138-2736e62e0919?w=600&q=80"
+ "https://images.unsplash.com/photo-1531384441138-2736e62e0919?w=600&q=80",
   "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80",
   "https://images.unsplash.com/photo-1507591064344-4c6ce005b128?w=600&q=80",
   "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=600&q=80",
