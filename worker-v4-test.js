@@ -590,74 +590,101 @@ return filterOK && categoryOK && collectionOK && modelOK && searchOK;
 const icon=document.createElement("span");
 icon.className="card-icon";
 
-const coverStyles={
-  "portrait-men":"linear-gradient(145deg,#405b83,#26344e 60%,#171c2b)",
-"portrait-women":"linear-gradient(145deg,#a75c78,#542d54 60%,#211b30)",
-  fashion:"linear-gradient(145deg,#a75c78,#542d54 60%,#211b30)",
-  travel:"linear-gradient(145deg,#348d9b,#24516e 60%,#17283b)",
-  business:"linear-gradient(145deg,#a28a58,#51452f 60%,#20212b)",
-  cars:"linear-gradient(145deg,#a94e45,#542d3a 60%,#1b1d2b)",
-  interiors:"linear-gradient(145deg,#9a866e,#5c5147 60%,#24232c)",
-  video:"linear-gradient(145deg,#6955a8,#382b67 60%,#191a30)"
+const categoryCovers = {
+  "portrait-men": [
+    "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=600&q=80",
+    "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600&q=80",
+    "https://images.unsplash.com/photo-1531384441138-2736e62e0919?w=600&q=80",
+    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80",
+    "https://images.unsplash.com/photo-1507591064344-4c6ce005b128?w=600&q=80",
+    "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=600&q=80",
+    "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=600&q=80",
+    "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=600&q=80",
+    "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&q=80",
+    "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600&q=80"
+  ],
+
+  "portrait-women": [
+    "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=600&q=80",
+    "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&q=80",
+    "https://images.unsplash.com/photo-1554151228-14d9def656e4?w=600&q=80",
+    "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600&q=80",
+    "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=600&q=80",
+    "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=600&q=80",
+    "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=600&q=80",
+    "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=600&q=80",
+    "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=600&q=80",
+    "https://images.unsplash.com/photo-1524250502761-1ac6f2e30d43?w=600&q=80"
+  ],
+
+  fashion: [
+    "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=600&q=80",
+    "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=600&q=80",
+    "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=600&q=80",
+    "https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?w=600&q=80",
+    "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&q=80",
+    "https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600&q=80",
+    "https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc?w=600&q=80",
+    "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=600&q=80"
+  ],
+
+  travel: [
+    "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600&q=80",
+    "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?w=600&q=80",
+    "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&q=80",
+    "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&q=80",
+    "https://images.unsplash.com/photo-1519608487953-e999c86e7455?w=600&q=80",
+    "https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?w=600&q=80"
+  ],
+
+  business: [
+    "https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=600&q=80",
+    "https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&q=80",
+    "https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=600&q=80",
+    "https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=600&q=80",
+    "https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=600&q=80"
+  ],
+
+  cars: [
+    "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=600&q=80",
+    "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=600&q=80",
+    "https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?w=600&q=80",
+    "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=600&q=80",
+    "https://images.unsplash.com/photo-1511919884226-fd3cad34687c?w=600&q=80"
+  ],
+
+  interiors: [
+    "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=600&q=80",
+    "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=600&q=80",
+    "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=600&q=80",
+    "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=600&q=80",
+    "https://images.unsplash.com/photo-1600210492493-0946911123ea?w=600&q=80",
+    "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=600&q=80"
+  ],
+
+  video: [
+    "https://images.unsplash.com/photo-1485846234645-a62644f84728?w=600&q=80",
+    "https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=600&q=80",
+    "https://images.unsplash.com/photo-1492619375914-88005aa9e8fb?w=600&q=80",
+    "https://images.unsplash.com/photo-1536240478700-b869070f9279?w=600&q=80",
+    "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=600&q=80"
+  ]
 };
 
-const malePortraitCovers=[
-  "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=600&q=80",
-  "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600&q=80",
- "https://images.unsplash.com/photo-1531384441138-2736e62e0919?w=600&q=80",
-  "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80",
-  "https://images.unsplash.com/photo-1507591064344-4c6ce005b128?w=600&q=80",
-  "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=600&q=80",
-  "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=600&q=80",
-  "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=600&q=80",
-  "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600&q=80",
-"https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&q=80"
-];
+const covers = categoryCovers[t.category] || [];
+const coverIndex =
+  Number(t.id.split("-").pop()) % Math.max(covers.length, 1);
 
-const fashionCovers=[
-  "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=600&q=80",
-  "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=600&q=80",
-  "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=600&q=80",
-  "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&q=80",
-  "https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?w=600&q=80",
-  "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&q=80",
-  "https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600&q=80",
-  "https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc?w=600&q=80",
-  "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=600&q=80",
-  "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=600&q=80"
-];
-
-if(t.category==="portrait-men" || t.category==="portrait-women"){
-  const covers=t.category==="portrait-men"
-    ? malePortraitCovers
-    : femalePortraitCovers;
-
-  const portraitIndex=
-    Number(t.id.split("-").pop())%covers.length;
-
-  icon.style.backgroundImage=
-    'url("'+covers[portraitIndex]+'")';
-  icon.style.backgroundSize="cover";
-  icon.style.backgroundPosition="center 35%";
-  icon.style.backgroundRepeat="no-repeat";
-  icon.textContent="";
-
-}else if(t.category==="fashion"){
-  const fashionIndex=
-    Number(t.id.split("-").pop())%fashionCovers.length;
-
-  icon.style.backgroundImage=
-    'url("'+fashionCovers[fashionIndex]+'")';
-  icon.style.backgroundSize="cover";
-  icon.style.backgroundPosition="center";
-  icon.style.backgroundRepeat="no-repeat";
-  icon.textContent="";
-
-}else{
-  icon.textContent=t.icon;
-  icon.style.background=
-    coverStyles[t.category] ||
-    "linear-gradient(145deg,#514477,#28243d 60%,#191e2c)";
+if (covers.length) {
+  icon.style.backgroundImage =
+    'url("' + covers[coverIndex] + '")';
+  icon.style.backgroundSize = "cover";
+  icon.style.backgroundPosition =
+    t.category.startsWith("portrait") ? "center 35%" : "center";
+  icon.style.backgroundRepeat = "no-repeat";
+  icon.textContent = "";
+} else {
+  icon.textContent = t.icon;
 }
 
 icon.setAttribute("aria-label",t.categoryName+" — обложка");
