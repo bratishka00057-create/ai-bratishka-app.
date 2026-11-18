@@ -276,9 +276,8 @@ const save=document.getElementById("save");
 let outputUrl="";
 let previewUrl="";
 let selectedMode="background";
-let currentModePrompt="";
-const libraryFilters=document.querySelectorAll(".library-filter");
 
+let currentModePrompt="";
 
 const libraryFilters=document.querySelectorAll(".library-filter");
 const templateCards=document.querySelectorAll(".template-card");
@@ -320,8 +319,6 @@ templateCards.forEach(card=>{
   });
 });
 
-const libraryFilters=document.querySelectorAll(".library-filter");
-
 const modePrompts={
 background:"Замени только фон на роскошную современную локацию. Сохрани человека, лицо, волосы, одежду, позу и пропорции без изменений. Сделай реалистичное освещение и естественные края волос.",
 portrait:"Создай профессиональный портрет с мягким объёмным светом. Сохрани точную идентичность лица, возраст, черты, причёску и естественную текстуру кожи.",
@@ -332,18 +329,20 @@ creative:"Опиши свою идею. Укажи, что именно нужн
 };
 
 document.querySelectorAll("#modes .mode").forEach(btn=>btn.addEventListener("click",()=>{
-document.querySelectorAll(".mode").forEach(x=>x.classList.remove("active"));
-btn.classList.add("active");
+  document.querySelectorAll("#modes .mode").forEach(x=>x.classList.remove("active"));
+  btn.classList.add("active");
 
-selectedMode=btn.dataset.mode;
-currentModePrompt=modePrompts[selectedMode];
+  selectedMode=btn.dataset.mode;
+  currentModePrompt=modePrompts[selectedMode];
 
-promptBox.placeholder=currentModePrompt;
-promptBox.value=currentModePrompt;
+  promptBox.placeholder=currentModePrompt;
+  promptBox.value=currentModePrompt;
 }));
 
-document.querySelectorAll(".preset").forEach(btn=>btn.addEventListener("click",()=>{
-promptBox.value=btn.dataset.prompt;
+document.querySelectorAll(".preset:not(.library-filter):not(.template-card)").forEach(btn=>btn.addEventListener("click",()=>{
+  if(btn.dataset.prompt){
+    promptBox.value=btn.dataset.prompt;
+  }
 }));
 
 photo.addEventListener("change",()=>{
