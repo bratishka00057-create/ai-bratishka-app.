@@ -73,6 +73,16 @@ button{cursor:pointer}
 .mode b{font-size:10px}
 }
 @media(max-width:370px){.modes{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.library-categories {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.library-categories .mode {
+  cursor: pointer;
+  min-height: 76px;
+}
 </style>
 </head>
 <body>
@@ -88,6 +98,115 @@ button{cursor:pointer}
 <p>Выбери задачу, загрузи снимок и опиши желаемый результат. Профессиональные инструменты редактирования в едином пространстве.</p>
 </section>
 
+<section class="panel" style="margin-bottom:18px">
+
+  <div class="section-head">
+
+    <h2>✦ Тренды и шаблоны</h2>
+
+    <span class="status-pill">STUDIO LIBRARY</span>
+
+  </div>
+
+  <p class="hint">Популярные идеи и готовые сценарии для творчества</p>
+
+  <div class="presets" style="margin:16px 0">
+
+<button class="preset library-filter" data-filter="photo">📸 Фото</button>
+
+<button class="preset library-filter" data-filter="video">🎬 Видео</button>
+
+<button class="preset library-filter" data-filter="popular">🔥 Популярное</button>
+
+<button class="preset library-filter" data-filter="new">🆕 Новинки</button>
+
+  </div>
+
+  <div class="section-head">
+
+    <h2>Популярные категории</h2>
+
+  </div>
+
+
+
+<div class="modes library-categories">
+
+  <button class="mode"><span>✨</span><b>Портреты</b></button>
+
+  <button class="mode"><span>👗</span><b>Мода</b></button>
+
+  <button class="mode"><span>🌍</span><b>Путешествия</b></button>
+
+  <button class="mode"><span>💼</span><b>Бизнес</b></button>
+
+  <button class="mode"><span>🚘</span><b>Автомобили</b></button>
+
+  <button class="mode"><span>🏡</span><b>Интерьеры</b></button>
+
+</div>
+
+<div id="libraryCards" class="presets" style="margin-top:16px">
+
+  <button class="preset template-card"
+
+    data-type="photo"
+
+    data-category="portrait"
+
+    data-prompt="Создай профессиональную портретную фотосессию, сохранив внешность и черты лица человека.">
+
+    ✨ Профессиональный портрет
+
+  </button>
+
+  <button class="preset template-card"
+
+    data-type="photo"
+
+    data-category="travel"
+
+    data-prompt="Создай реалистичную фотографию в красивой локации для путешествий, сохранив внешность человека.">
+
+    🌍 Путешествие мечты
+
+  </button>
+
+  <button class="preset template-card"
+
+    data-type="photo"
+
+    data-category="fashion"
+
+    data-prompt="Создай стильную журнальную fashion-фотосессию с профессиональным светом, сохранив лицо и внешность человека.">
+
+    👗 Fashion-фотосессия
+
+  </button>
+
+  <button class="preset template-card"
+
+    data-type="video"
+
+    data-category="popular"
+
+    data-prompt="Подготовь идею кинематографичного короткого видео на основе загруженной фотографии.">
+
+    🎬 Кинематографичное видео
+
+  </button>
+
+</div>
+
+<div class="safe">
+
+    <b>🔄 Автообновление трендов</b>
+
+    Каталог будет регулярно получать новые подборки после подключения источников трендов и расписания обновления.
+
+  </div>
+
+</section>
 <div class="layout">
 <section class="panel">
 <div class="section-head"><h2>01 · Выбери режим</h2><span class="hint">Режим обработки</span></div>
@@ -158,6 +277,50 @@ let outputUrl="";
 let previewUrl="";
 let selectedMode="background";
 let currentModePrompt="";
+const libraryFilters=document.querySelectorAll(".library-filter");
+
+
+const libraryFilters=document.querySelectorAll(".library-filter");
+const templateCards=document.querySelectorAll(".template-card");
+
+libraryFilters.forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    libraryFilters.forEach(item=>item.classList.remove("active"));
+    btn.classList.add("active");
+
+    const filter=btn.dataset.filter;
+
+    templateCards.forEach(card=>{
+      const type=card.dataset.type;
+      const show=
+        filter==="photo" ? type==="photo" :
+        filter==="video" ? type==="video" :
+        filter==="popular" ? card.dataset.category==="popular" :
+        filter==="new" ? true : true;
+
+      card.style.display=show ? "" : "none";
+    });
+
+    const names={
+      photo:"Открыта подборка фотошаблонов",
+      video:"Открыта подборка видеошаблонов",
+      popular:"Открыта подборка популярных трендов",
+      new:"Открыта подборка новинок"
+    };
+
+    statusBox.textContent=names[filter] || "Открыта библиотека";
+  });
+});
+
+templateCards.forEach(card=>{
+  card.addEventListener("click",()=>{
+    promptBox.value=card.dataset.prompt;
+    statusBox.textContent="Шаблон выбран. Можно запускать обработку.";
+    promptBox.focus();
+  });
+});
+
+const libraryFilters=document.querySelectorAll(".library-filter");
 
 const modePrompts={
 background:"Замени только фон на роскошную современную локацию. Сохрани человека, лицо, волосы, одежду, позу и пропорции без изменений. Сделай реалистичное освещение и естественные края волос.",
@@ -168,7 +331,7 @@ studio:"Преврати снимок в профессиональную фот
 creative:"Опиши свою идею. Укажи, что именно нужно изменить и какие детали фотографии должны остаться нетронутыми."
 };
 
-document.querySelectorAll(".mode").forEach(btn=>btn.addEventListener("click",()=>{
+document.querySelectorAll("#modes .mode").forEach(btn=>btn.addEventListener("click",()=>{
 document.querySelectorAll(".mode").forEach(x=>x.classList.remove("active"));
 btn.classList.add("active");
 
