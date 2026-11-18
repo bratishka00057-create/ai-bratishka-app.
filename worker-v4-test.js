@@ -204,6 +204,19 @@ button,input,textarea{font:inherit}button{cursor:pointer}
   font-size:38px;
   background:radial-gradient(circle at 50% 35%,#514477,#28243d 55%,#191e2c);
 }
+.card-tag{
+  display:inline-flex;
+  align-self:flex-start;
+  padding:4px 8px;
+  border:1px solid #a18cff55;
+  border-radius:20px;
+  background:#8b70d522;
+  color:#d7c9ff;
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:.4px;
+  text-transform:uppercase;
+}
 .card-name{
   font-size:12px;
   font-weight:750;
@@ -581,9 +594,13 @@ icon.style.background=
 
 icon.setAttribute("aria-label",t.categoryName+" — обложка");
 
-    const name=document.createElement("span");
-    name.className="card-name";
-    name.textContent=t.name;
+const tag=document.createElement("span");
+tag.className="card-tag";
+tag.textContent=t.categoryName;
+
+const name=document.createElement("span");
+name.className="card-name";
+name.textContent=t.name;
 
     const meta=document.createElement("span");
     meta.className="card-meta";
