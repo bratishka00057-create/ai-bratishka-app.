@@ -606,7 +606,12 @@ const malePortraitCovers=[
   "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600&q=80",
   "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&q=80",
   "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80",
-  "https://images.unsplash.com/photo-1507591064344-4c6ce005b128?w=600&q=80"
+  "https://images.unsplash.com/photo-1507591064344-4c6ce005b128?w=600&q=80",
+  "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=600&q=80",
+  "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=600&q=80",
+  "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=600&q=80",
+  "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600&q=80",
+"https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&q=80"
 ];
 
 const femalePortraitCovers=[
@@ -614,7 +619,12 @@ const femalePortraitCovers=[
   "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&q=80",
   "https://images.unsplash.com/photo-1554151228-14d9def656e4?w=600&q=80",
   "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=600&q=80",
-  "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=600&q=80"
+  "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=600&q=80",
+  "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=600&q=80",
+  "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=600&q=80",
+  "https://images.unsplash.com/photo-1524250502761-1ac6f2e30d43?w=600&q=80",
+  "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=600&q=80",
+  "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600&q=80"
 ];
 
 if(t.category==="portrait-men" || t.category==="portrait-women"){
