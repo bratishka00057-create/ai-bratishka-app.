@@ -1,0 +1,7 @@
+name = "ai-bratishka-v4-test"
+main = "worker-v4-test.js"
+compatibility_date = "2026-11-15"
+workers_dev = true
+
+[ai]
+binding = "AI"
