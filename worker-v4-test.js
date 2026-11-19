@@ -2977,8 +2977,9 @@ $("#presets")?.addEventListener("click", event => {
   promptInput.focus();
 });
 
-photoInput?.addEventListener("change", () => {
-  const file = photoInput.files?.[0];
+
+photoInput?.addEventListener("change", async function () {
+  const file = this.files && this.files[0];
 
   clearPreviousResult();
 
@@ -2988,8 +2989,15 @@ photoInput?.addEventListener("change", () => {
     return;
   }
 
+  if (!file.type || !file.type.startsWith("image/")) {
+    setStatus("Выбери файл изображения.", "error");
+    this.value = "";
+    state.selectedFile = null;
+    return;
+  }
+
   if (!validateImage(file)) {
-    photoInput.value = "";
+    this.value = "";
     state.selectedFile = null;
     if (previewImage) previewImage.style.display = "none";
     return;
@@ -2997,24 +3005,20 @@ photoInput?.addEventListener("change", () => {
 
   state.selectedFile = file;
 
-  const reader = new FileReader();
+  try {
+    const imageUrl = URL.createObjectURL(file);
 
-  reader.onload = () => {
-    if (!previewImage) return;
+    if (previewImage) {
+      previewImage.src = imageUrl;
+      previewImage.style.display = "block";
+    }
 
-    previewImage.src = reader.result;
-    previewImage.style.display = "block";
-  };
-
-  reader.onerror = () => {
-    setStatus("Не удалось прочитать фотографию. Попробуй другой файл.", "error");
-  };
-
-  reader.readAsDataURL(file);
-
-  setStatus("Фото загружено. Теперь опиши желаемый результат.", "success");
+    setStatus("Фото загружено. Теперь опиши желаемый результат.", "success");
+  } catch (error) {
+    state.selectedFile = null;
+    setStatus("Не удалось открыть фотографию. Попробуй другой файл.", "error");
+  }
 });
-
 function getFinalPrompt() {
   const customPrompt = promptInput?.value.trim() || "";
   const modePrompt = MODE_PROMPTS[state.mode] || "";
