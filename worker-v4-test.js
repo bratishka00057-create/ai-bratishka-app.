@@ -1223,7 +1223,7 @@ function escapeHTML(value) {
 }
 
 function getTemplateId(item, index) {
-  return String(item.id || item.key || `${item.category || "idea"}-${index}`);
+return String(item.id || item.key || ((item.category || "idea") + "-" + index));
 }
 
 function getTemplateCategory(item) {
@@ -1247,29 +1247,29 @@ function renderCategories() {
   const root = $("#categories");
   if (!root) return;
 
-  root.innerHTML = CATEGORY_INFO.map(category => {
+root.innerHTML = CATEGORY_INFO.map(category => {
     const active = state.category === category.id ? " active" : "";
     const cover = CATEGORY_COVERS[category.id];
 
     if (category.id === "all") {
-      return `
-        <button class="category-card category-all${active}" type="button"
-          data-category="${category.id}">
-          <span class="category-icon">${category.icon}</span>
-          <b>${category.name}</b>
-        </button>`;
+      return \`
+        <button class="category-card category-all\${active}" type="button"
+          data-category="\${category.id}">
+          <span class="category-icon">\${category.icon}</span>
+          <b>\${category.name}</b>
+        </button>\`;
     }
 
-    return `
-      <button class="category-card${active}" type="button"
-        data-category="${category.id}">
-        <img src="${cover}" alt="" loading="lazy">
+    return \`
+      <button class="category-card\${active}" type="button"
+        data-category="\${category.id}">
+        <img src="\${cover}" alt="" loading="lazy">
         <span class="category-overlay"></span>
         <span class="category-content">
-          <span>${category.icon}</span>
-          <b>${category.name}</b>
+          <span>\${category.icon}</span>
+          <b>\${category.name}</b>
         </span>
-      </button>`;
+      </button>\`;
   }).join("");
 }
 
@@ -1277,12 +1277,12 @@ function renderCollections() {
   const root = $("#collections");
   if (!root) return;
 
-  root.innerHTML = COLLECTIONS.map(collection => `
-    <button class="collection-chip${state.collection === collection.id ? " active" : ""}"
-      type="button" data-collection="${collection.id}">
-      ${escapeHTML(collection.name)}
+  root.innerHTML = COLLECTIONS.map(collection => \`
+    <button class="collection-chip\${state.collection === collection.id ? " active" : ""}"
+      type="button" data-collection="\${collection.id}">
+      \${escapeHTML(collection.name)}
     </button>
-  `).join("");
+  \`).join("");
 }
 
 function matchesCollection(item) {
@@ -1363,7 +1363,7 @@ function renderCards() {
   if (empty) empty.hidden = filtered.length !== 0;
 
   const count = $("#cardsCount");
-  if (count) count.textContent = `${filtered.length} идей`;
+if (count) count.textContent = \`\${filtered.length} идей\`;
 
   const title = $("#cardsTitle");
   if (title) {
@@ -1387,28 +1387,28 @@ function renderCards() {
     const description = escapeHTML(item.description || item.prompt || "");
     const category = escapeHTML(item.categoryTitle || item.category || "AI STUDIO");
 
-    return `
-      <article class="template-card" data-id="${escapeHTML(id)}">
+    return \`
+      <article class="template-card" data-id="\${escapeHTML(id)}">
         <div class="template-image">
-          <img src="${escapeHTML(image)}" alt="${title}" loading="lazy">
-          <span class="template-type">${video ? "VIDEO IDEA" : "PHOTO IDEA"}</span>
-          ${item.popular ? '<span class="template-popular">ПОПУЛЯРНОЕ</span>' : ""}
-          ${item.isNew ? '<span class="template-new">NEW</span>' : ""}
-          <button class="favorite-button${favorite ? " active" : ""}"
-            type="button" data-favorite="${escapeHTML(id)}"
-            aria-label="${favorite ? "Убрать из избранного" : "Добавить в избранное"}">
-            ${favorite ? "♥" : "♡"}
+          <img src="\${escapeHTML(image)}" alt="\${title}" loading="lazy">
+          <span class="template-type">\${video ? "VIDEO IDEA" : "PHOTO IDEA"}</span>
+          \${item.popular ? '<span class="template-popular">ПОПУЛЯРНОЕ</span>' : ""}
+          \${item.isNew ? '<span class="template-new">NEW</span>' : ""}
+          <button class="favorite-button\${favorite ? " active" : ""}"
+            type="button" data-favorite="\${escapeHTML(id)}"
+            aria-label="\${favorite ? "Убрать из избранного" : "Добавить в избранное"}">
+            \${favorite ? "♥" : "♡"}
           </button>
         </div>
         <div class="template-info">
-          <small>${category}</small>
-          <h4>${title}</h4>
-          <p>${description}</p>
-          <button class="template-use" type="button" data-use="${escapeHTML(id)}">
-            ${video ? "Выбрать сценарий" : "Использовать идею"} <span>↗</span>
+          <small>\${category}</small>
+          <h4>\${title}</h4>
+          <p>\${description}</p>
+          <button class="template-use" type="button" data-use="\${escapeHTML(id)}">
+            \${video ? "Выбрать сценарий" : "Использовать идею"} <span>↗</span>
           </button>
         </div>
-      </article>`;
+      </article>\`;
   }).join("");
 }
 
@@ -1627,13 +1627,9 @@ $("#presets")?.addEventListener("click", event => {
 });
 
 function setStatus(message, type = "") {
-
   if (!statusBox) return;
-
   statusBox.textContent = message;
-
-  statusBox.className = "status" + (type ? ` ${type}` : "");
-
+  statusBox.className = "status" + (type ? \` \${type}\` : "");
 }
 
 function clearPreviousResult() {
@@ -1834,7 +1830,7 @@ async function processPhoto() {
 
     if (!response.ok) {
 
-      throw new Error(data.error || `Ошибка обработки: ${response.status}`);
+throw new Error(data.error || \`Ошибка обработки: \${response.status}\`);
 
     }
 
@@ -1848,7 +1844,7 @@ async function processPhoto() {
 
       ? data.image
 
-      : `data:image/png;base64,${data.image}`;
+ : \`data:image/png;base64,\${data.image}\`;
 
     if (resultImage) {
 
@@ -1892,7 +1888,7 @@ saveButton?.addEventListener("click", () => {
 
   link.href = state.resultUrl;
 
-  link.download = `ai-bratishka-${Date.now()}.png`;
+link.download = \`ai-bratishka-\${Date.now()}.png\`;
 
   document.body.appendChild(link);
 
