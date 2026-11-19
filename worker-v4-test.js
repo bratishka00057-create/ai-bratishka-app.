@@ -1595,6 +1595,133 @@ body {
   }
 }
 
+
+/* ===== PREMIUM TEMPLATE CARDS ===== */
+
+#catalog .template-card {
+  border:1px solid #76501D;
+  border-radius:17px;
+  background:#11100e;
+  overflow:hidden;
+  box-shadow:none;
+  transition:border-color .2s ease, transform .2s ease;
+}
+
+#catalog .template-card:active {
+  transform:scale(.985);
+  border-color:#E5A928;
+}
+
+/* Фото */
+#catalog .template-image {
+  position:relative;
+  height:155px;
+  background:#171410;
+  overflow:hidden;
+}
+
+#catalog .template-image img {
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:cover;
+  transition:transform .35s ease;
+}
+
+#catalog .template-card:hover .template-image img {
+  transform:scale(1.03);
+}
+
+/* Метки */
+#catalog .template-type,
+#catalog .template-popular,
+#catalog .template-new {
+  border:1px solid #986313;
+  background:rgba(12,10,8,.88);
+  color:#FFD15C;
+  backdrop-filter:blur(5px);
+}
+
+/* Избранное */
+#catalog .favorite-button {
+  width:34px;
+  height:34px;
+  border:1px solid #986313;
+  background:rgba(12,10,8,.88);
+  color:#FFD15C;
+  font-size:18px;
+}
+
+#catalog .favorite-button.active {
+  color:#FFD15C;
+  background:#30210e;
+  border-color:#E5A928;
+}
+
+/* Информация */
+#catalog .template-info {
+  padding:12px;
+  background:linear-gradient(180deg,#151310,#100f0d);
+}
+
+#catalog .template-info small {
+  color:#C49A45;
+  font-size:9px;
+  letter-spacing:1px;
+}
+
+#catalog .template-info h4 {
+  margin:7px 0;
+  color:#F5F0E6;
+  font-size:13px;
+  line-height:1.35;
+  font-weight:600;
+}
+
+#catalog .template-info p {
+  color:#A99B82;
+  font-size:10.5px;
+  line-height:1.45;
+  -webkit-line-clamp:2;
+  margin:6px 0 12px;
+}
+
+/* Кнопка применения */
+#catalog .template-use {
+  min-height:38px;
+  border:1px solid #986313;
+  border-radius:10px;
+  background:linear-gradient(135deg,#30210e,#19140d);
+  color:#FFD15C;
+  font-weight:600;
+  transition:.2s ease;
+}
+
+#catalog .template-use:active {
+  background:linear-gradient(135deg,#493318,#24190d);
+  border-color:#E5A928;
+  transform:scale(.98);
+}
+
+/* Мобильная версия */
+@media(max-width:390px) {
+  #catalog .template-image {
+    height:135px;
+  }
+
+  #catalog .template-info {
+    padding:10px;
+  }
+
+  #catalog .template-info h4 {
+    font-size:12px;
+  }
+
+  #catalog .template-info p {
+    font-size:10px;
+  }
+}
+
 </style>
 
 </head>
