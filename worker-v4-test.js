@@ -1722,6 +1722,162 @@ body {
   }
 }
 
+/* ===== BRATISHKA HISTORY ===== */
+
+.history-section {
+  padding: 22px 16px 110px;
+  color: #F5F0E6;
+}
+
+.history-header h2 {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 10px 0;
+  color: #F5F0E6;
+}
+
+.history-header p {
+  color: #A99B82;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.history-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 24px 0 18px;
+  color: #C49A45;
+  font-size: 12px;
+}
+
+.history-clear {
+  background: #17130E;
+  color: #D9B35A;
+  border: 1px solid #76501D;
+  padding: 9px 13px;
+  border-radius: 10px;
+  font-size: 12px;
+}
+
+.history-clear:active {
+  background: #30210E;
+  border-color: #E5A928;
+}
+
+.history-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.history-card {
+  overflow: hidden;
+  border: 1px solid #76501D;
+  border-radius: 15px;
+  background: #11100E;
+}
+
+.history-card-image {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  display: block;
+  background: #171410;
+}
+
+.history-card-info {
+  padding: 10px;
+}
+
+.history-card-date {
+  color: #C49A45;
+  font-size: 10px;
+  margin-bottom: 7px;
+}
+
+.history-card-prompt {
+  color: #F5F0E6;
+  font-size: 11px;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.history-card-actions {
+  display: flex;
+  gap: 7px;
+}
+
+.history-card-actions button {
+  flex: 1;
+  min-width: 0;
+  padding: 9px 5px;
+  border-radius: 9px;
+  font-size: 11px;
+  color: #FFD15C;
+  background: #19140D;
+  border: 1px solid #986313;
+}
+
+.history-card-actions button:active {
+  transform: scale(.97);
+  background: #30210E;
+}
+
+.history-empty {
+  text-align: center;
+  padding: 50px 20px;
+  border: 1px dashed #76501D;
+  border-radius: 18px;
+  background: #11100E;
+}
+
+.history-empty-icon {
+  font-size: 42px;
+  color: #E5A928;
+  margin-bottom: 15px;
+}
+
+.history-empty h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
+  color: #F5F0E6;
+}
+
+.history-empty p {
+  font-size: 12px;
+  line-height: 1.6;
+  color: #A99B82;
+  margin-bottom: 20px;
+}
+
+#history-go-studio {
+  background: linear-gradient(135deg, #30210E, #19140D);
+  border: 1px solid #986313;
+  color: #FFD15C;
+  border-radius: 12px;
+  padding: 12px 18px;
+  font-weight: 600;
+}
+
+@media (max-width: 390px) {
+  .history-grid {
+    gap: 9px;
+  }
+
+  .history-card-info {
+    padding: 8px;
+  }
+
+  .history-card-actions button {
+    font-size: 10px;
+    padding: 8px 3px;
+  }
+}
 </style>
 
 </head>
@@ -2212,15 +2368,57 @@ body {
 
 <!-- ИСТОРИЯ -->
 
-<section class="placeholder-section" id="history">
+<!-- ИСТОРИЯ РАБОТ -->
 
-  <div class="placeholder-icon">◷</div>
+<section id="history" class="history-section">
 
-  <div class="eyebrow">ТВОИ РАБОТЫ</div>
+  <div class="history-header">
 
-  <h2>История</h2>
+    <div>
 
-  <p>Здесь появится история созданных фотографий и проектов. Раздел пока готовится.</p>
+      <div class="eyebrow">ТВОИ РАБОТЫ</div>
+
+      <h2>История</h2>
+
+      <p>Твои созданные изображения в одном месте.</p>
+
+    </div>
+
+  </div>
+
+  <div class="history-toolbar">
+
+    <span id="history-count">0 работ</span>
+
+    <button type="button" id="history-clear" class="history-clear">
+
+      Очистить
+
+    </button>
+
+  </div>
+
+  <div id="history-grid" class="history-grid"></div>
+
+  <div id="history-empty" class="history-empty">
+
+    <div class="history-empty-icon">◷</div>
+
+    <h3>Пока здесь пусто</h3>
+
+    <p>
+
+      Создай своё первое изображение, и оно появится здесь.
+
+    </p>
+
+    <button type="button" id="history-go-studio">
+
+      Открыть студию
+
+    </button>
+
+  </div>
 
 </section>
 
@@ -2809,6 +3007,178 @@ function getFinalPrompt() {
   return modePrompt;
 }
 
+// ===== ИСТОРИЯ РАБОТ =====
+
+const HISTORY_KEY = "bratishka_v4_history";
+const HISTORY_LIMIT = 5;
+
+function getHistory() {
+  try {
+    return JSON.parse(localStorage.getItem(HISTORY_KEY) || "[]");
+  } catch (e) {
+    return [];
+  }
+}
+
+function saveHistoryEntry(image, prompt, mode) {
+  try {
+    const history = getHistory();
+
+    const entry = {
+      id: Date.now(),
+      image: image,
+      prompt: prompt || "Созданное изображение",
+      mode: mode || "creative",
+      date: new Date().toISOString()
+    };
+
+    history.unshift(entry);
+
+    const limited = history.slice(0, HISTORY_LIMIT);
+
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(limited));
+
+    renderHistory();
+
+    return true;
+  } catch (e) {
+    console.warn("История не сохранена:", e);
+    return false;
+  }
+}
+
+function renderHistory() {
+  const grid = document.getElementById("history-grid");
+  const empty = document.getElementById("history-empty");
+  const count = document.getElementById("history-count");
+
+  if (!grid) return;
+
+  const history = getHistory();
+
+  grid.innerHTML = "";
+
+  if (count) {
+    count.textContent = history.length + " " +
+      (history.length === 1 ? "работа" :
+       history.length >= 2 && history.length <= 4 ? "работы" : "работ");
+  }
+
+  if (empty) {
+    empty.style.display = history.length ? "none" : "block";
+  }
+
+  history.forEach(function(item) {
+    const card = document.createElement("div");
+    card.className = "history-card";
+
+    const img = document.createElement("img");
+    img.className = "history-card-image";
+    img.src = item.image;
+    img.alt = "Созданная работа";
+    img.loading = "lazy";
+
+    const info = document.createElement("div");
+    info.className = "history-card-info";
+
+    const date = document.createElement("div");
+    date.className = "history-card-date";
+
+    date.textContent = new Date(item.date).toLocaleString("ru-RU", {
+      day: "2-digit",
+      month: "short",
+      hour: "2-digit",
+      minute: "2-digit"
+    });
+
+    const prompt = document.createElement("div");
+    prompt.className = "history-card-prompt";
+    prompt.textContent = item.prompt;
+
+    const actions = document.createElement("div");
+    actions.className = "history-card-actions";
+
+    const openButton = document.createElement("button");
+    openButton.type = "button";
+    openButton.textContent = "Открыть";
+
+    openButton.addEventListener("click", function() {
+      state.resultUrl = item.image;
+
+      if (resultImage) {
+        resultImage.src = item.image;
+        resultImage.style.display = "block";
+      }
+
+      if (emptyResult) emptyResult.style.display = "none";
+      if (saveButton) saveButton.style.display = "block";
+
+      openSection("studio");
+
+      setStatus("Работа открыта из истории.", "success");
+    });
+
+    const downloadButton = document.createElement("button");
+    downloadButton.type = "button";
+    downloadButton.textContent = "Скачать";
+
+    downloadButton.addEventListener("click", function() {
+      const link = document.createElement("a");
+      link.href = item.image;
+      link.download = "bratishka-" + item.id + ".png";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    });
+
+    const deleteButton = document.createElement("button");
+    deleteButton.type = "button";
+    deleteButton.textContent = "Удалить";
+
+    deleteButton.addEventListener("click", function() {
+      const updated = getHistory().filter(function(x) {
+        return x.id !== item.id;
+      });
+
+      localStorage.setItem(HISTORY_KEY, JSON.stringify(updated));
+      renderHistory();
+    });
+
+    actions.appendChild(openButton);
+    actions.appendChild(downloadButton);
+    actions.appendChild(deleteButton);
+
+    info.appendChild(date);
+    info.appendChild(prompt);
+    info.appendChild(actions);
+
+    card.appendChild(img);
+    card.appendChild(info);
+
+    grid.appendChild(card);
+  });
+}
+
+// Очистка истории
+
+document.getElementById("history-clear")?.addEventListener("click", function() {
+  if (!getHistory().length) return;
+
+  if (!confirm("Удалить все работы из истории?")) return;
+
+  localStorage.removeItem(HISTORY_KEY);
+  renderHistory();
+});
+
+// Переход в студию из пустой истории
+
+document.getElementById("history-go-studio")?.addEventListener("click", function() {
+  openSection("studio");
+});
+
+// Загружаем историю при открытии приложения
+
+renderHistory();
 async function processPhoto() {
   const file = state.selectedFile;
   const prompt = getFinalPrompt();
@@ -2895,9 +3265,11 @@ async function processPhoto() {
     if (emptyResult) emptyResult.style.display = "none";
     if (saveButton) saveButton.style.display = "block";
 
-    state.resultUrl = imageData;
+state.resultUrl = imageData;
 
-    setStatus("Готово! Результат можно сохранить.", "success");
+saveHistoryEntry(imageData, prompt, state.mode);
+
+setStatus("Готово! Результат можно сохранить.", "success");
 
     if (resultImage) {
       resultImage.scrollIntoView({
