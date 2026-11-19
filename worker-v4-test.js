@@ -3032,63 +3032,6 @@ function validateImage(file) {
 
   return true;
 }
-  if (!file) {
-    setStatus("Сначала выбери фотографию.", "error");
-    return false;
-  }
-
-  const allowedTypes = [
-    "image/jpeg",
-    "image/png",
-    "image/webp",
-    "image/heic",
-    "image/heif",
-    "image/heic-sequence",
-    "image/heif-sequence",
-    "image/avif",
-    "image/gif",
-    "image/bmp",
-    "image/tiff"
-  ];
-
-  const allowedExtensions = [
-    ".jpg",
-    ".jpeg",
-    ".png",
-    ".webp",
-    ".heic",
-    ".heif",
-    ".avif",
-    ".gif",
-    ".bmp",
-    ".tif",
-    ".tiff"
-  ];
-
-  const imageName = (image.name || "").toLowerCase();
-
-  const hasAllowedExtension = allowedExtensions.some(ext =>
-    imageName.endsWith(ext)
-  );
-
-  const hasAllowedType = allowedTypes.includes(
-    (image.type || "").toLowerCase()
-  );
-
-  if (!hasAllowedType && !hasAllowedExtension) {
-    return jsonResponse({
-      error: "Формат фотографии не поддерживается."
-    }, 400);
-  }
-
-  if (image.size === 0 || image.size > MAX_FILE_SIZE) {
-    return jsonResponse({
-      error: "Размер фотографии должен быть от 1 байта до 25 МБ."
-    }, 400);
-  }
-
-  return true;
-}
 
 $$(".mode").forEach(button => {
   button.addEventListener("click", () => {
