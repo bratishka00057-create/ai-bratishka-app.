@@ -3579,26 +3579,47 @@ async function handleEdit(request, env) {
       error: "Не найдена фотография."
     }, 400);
   }
-
   const allowedTypes = [
     "image/jpeg",
     "image/png",
-    "image/webp"
+    "image/webp",
+    "image/heic",
+    "image/heif",
+    "image/heic-sequence",
+    "image/heif-sequence",
+    "image/avif",
+    "image/gif",
+    "image/bmp",
+    "image/tiff"
   ];
 
-  if (!allowedTypes.includes(image.type)) {
+  const allowedExtensions = [
+    ".jpg", ".jpeg", ".png", ".webp",
+    ".heic", ".heif", ".avif",
+    ".gif", ".bmp", ".tif", ".tiff"
+  ];
+
+  const imageName = (image.name || "").toLowerCase();
+
+  const hasAllowedExtension = allowedExtensions.some(ext =>
+    imageName.endsWith(ext)
+  );
+
+  const hasAllowedType = allowedTypes.includes(
+    (image.type || "").toLowerCase()
+  );
+
+  if (!hasAllowedType && !hasAllowedExtension) {
     return jsonResponse({
-      error: "Поддерживаются только JPG, PNG и WebP."
+      error: "Формат фотографии не поддерживается."
     }, 400);
   }
 
   if (image.size === 0 || image.size > MAX_FILE_SIZE) {
     return jsonResponse({
-      error: "Размер фотографии должен быть от 1 байта до 15 МБ."
+      error: "Размер фотографии должен быть от 1 байта до 25 МБ."
     }, 400);
   }
-
-  if (typeof prompt !== "string" || !prompt.trim()) {
     return jsonResponse({
       error: "Необходимо описать желаемый результат."
     }, 400);
