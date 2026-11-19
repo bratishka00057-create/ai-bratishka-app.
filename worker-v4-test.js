@@ -1385,66 +1385,75 @@ button{cursor:pointer}
 /* ===== PREMIUM GOLD DESIGN UPDATE ===== */
 
 :root {
-  --accent: #C49A45;
-  --gold: #C49A45;
-  --gold-soft: #E0BD6B;
-  --line: #40321F;
+  --accent:#E5A928;
+  --gold:#E5A928;
+  --gold-soft:#FFD15C;
+  --line:#986313;
 }
 
-/* Золотые акценты */
+/* Основные золотые акценты */
 .eyebrow,
 .search-box span,
 .clear-search {
-  color: #E0BD6B;
+  color:#FFD15C;
 }
 
 .pill {
-  color: #E8C879;
-  border-color: #80602D;
-  background: linear-gradient(135deg,#302416,#1b1711);
+  color:#FFD15C;
+  border-color:#986313;
+  background:linear-gradient(135deg,#21170a,#13110d);
 }
 
 .filter.active,
 .model-filter.active,
 .collection-chip.active {
-  color: #FFE5A3;
-  border-color: #D2A64F;
-  background: linear-gradient(135deg,#49371D,#302315);
-  box-shadow: inset 0 0 0 1px #C49A4530;
+  color:#FFD15C;
+  border-color:#E5A928;
+  background:linear-gradient(135deg,#30210e,#19140d);
+  box-shadow:none;
 }
 
-/* Фильтры и подборки */
+/* Фильтры */
 #catalog .filter,
 #catalog .model-filter,
 #catalog .collection-chip {
-  border: 1px solid #40321F;
-  background: #1b1916;
-  color: #E4D9C6;
-  transition: .2s ease;
+  border:1px solid #684717;
+  background:#171512;
+  color:#D6C5A6;
+  transition:.2s ease;
 }
 
 #catalog .filter:active,
 #catalog .model-filter:active,
 #catalog .collection-chip:active {
-  transform: scale(.97);
+  transform:scale(.97);
 }
 
 #catalog .collection-chip {
-  min-height: 42px;
-  padding: 10px 13px;
-  border-radius: 13px;
-  font-size: 12px;
+  min-height:42px;
+  padding:10px 13px;
+  border-radius:13px;
+  font-size:12px;
+}
+
+#catalog .filter.active,
+#catalog .model-filter.active,
+#catalog .collection-chip.active {
+  border-color:#E5A928;
+  color:#FFD15C;
+  background:linear-gradient(135deg,#392710,#1b150c);
 }
 
 /* Категории */
 #catalog .category-card {
-  border-color: #493820;
-  border-radius: 15px;
+  border:1px solid #76501D;
+  border-radius:15px;
+  box-shadow:none;
 }
 
 #catalog .category-card.active {
-  border: 2px solid #D2A64F;
-  box-shadow: 0 0 14px #C49A4530;
+  border:2px solid #E5A928;
+  box-shadow:0 0 5px #E5A92820;
 }
 
 #catalog .category-content {
@@ -1461,47 +1470,49 @@ button{cursor:pointer}
 }
 
 #catalog .category-all {
-  border-color:#A77C35;
-  background:linear-gradient(145deg,#3b2c19,#17130e);
+  border-color:#E5A928;
+  background:linear-gradient(145deg,#30210e,#17130e);
 }
 
 /* Карточки идей */
 #catalog .template-card {
-  border-color:#40321F;
+  border:1px solid #684717;
   border-radius:16px;
   background:linear-gradient(180deg,#201c16,#121110);
+  box-shadow:none;
 }
 
 #catalog .template-card:active {
-  border-color:#C49A45;
+  border-color:#E5A928;
 }
 
 #catalog .template-type,
 #catalog .template-popular,
 #catalog .template-new {
-  border-color:#A77C35;
-  color:#F0D28A;
+  border-color:#986313;
+  color:#FFD15C;
   background:#21190f;
 }
 
 #catalog .template-use {
-  border:1px solid #A77C35;
+  border:1px solid #986313;
   border-radius:10px;
-  background:linear-gradient(135deg,#4a361c,#2a2013);
-  color:#FFE5A3;
+  background:linear-gradient(135deg,#392710,#21180e);
+  color:#FFD15C;
+  box-shadow:none;
 }
 
 #catalog .favorite-button {
-  color:#E0BD6B;
-  border-color:#80602D;
+  color:#FFD15C;
+  border-color:#986313;
   background:#17120dcc;
 }
 
 #catalog .favorite-button.active {
-  color:#FFD36A;
+  color:#FFD15C;
 }
 
-/* Основная нижняя навигация */
+/* Нижняя навигация */
 body {
   padding-bottom:100px;
 }
@@ -1517,8 +1528,8 @@ body {
   grid-template-columns:repeat(5,minmax(0,1fr));
   gap:5px;
   padding:9px 12px calc(9px + env(safe-area-inset-bottom));
-  border-top:1px solid #594426;
-  background:rgba(15,14,12,.96);
+  border-top:1px solid #684717;
+  background:rgba(10,9,8,.97);
   backdrop-filter:blur(18px);
   -webkit-backdrop-filter:blur(18px);
 }
@@ -1536,6 +1547,7 @@ body {
   border-radius:12px;
   background:transparent;
   color:#A99B82;
+  box-shadow:none;
 }
 
 .nav-item span {
@@ -1550,16 +1562,17 @@ body {
 }
 
 .nav-item.active {
-  color:#E5BD66;
-  border-color:#80602D;
-  background:linear-gradient(145deg,#302416,#1b1711);
+  color:#FFD15C;
+  border-color:#E5A928;
+  background:linear-gradient(145deg,#30210e,#1b150c);
+  box-shadow:0 0 5px #E5A92820;
 }
 
 .nav-item.nav-create {
-  color:#F1D38B;
-  border-color:#A77C35;
-  background:linear-gradient(145deg,#49351b,#261c11);
-  box-shadow:0 0 15px #C49A4520;
+  color:#FFD15C;
+  border-color:#E5A928;
+  background:linear-gradient(145deg,#392710,#21180e);
+  box-shadow:0 0 6px #E5A92820;
 }
 
 .footer {
