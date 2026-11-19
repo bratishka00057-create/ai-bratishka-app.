@@ -2683,161 +2683,101 @@ renderCards();
 <script>
 
 const photoInput = $("#photo");
-
 const previewImage = $("#preview");
-
 const resultImage = $("#result");
-
 const promptInput = $("#prompt");
-
 const runButton = $("#run");
-
 const saveButton = $("#save");
-
 const statusBox = $("#status");
-
 const emptyResult = $("#empty");
 
 const MODE_PROMPTS = {
-
   background: "Замени фон фотографии на реалистичную профессиональную локацию. Сохрани человека, его лицо, индивидуальные черты, волосы, одежду, позу и пропорции без изменений. Сделай естественное освещение, реалистичные тени и качественное совмещение человека с новым окружением.",
-
   portrait: "Создай профессиональный портрет высокого качества. Сохрани точную идентичность человека, форму лица, глаза, нос, губы, причёску и индивидуальные черты. Используй красивый объёмный свет, естественную текстуру кожи и реалистичную детализацию.",
-
   retouch: "Выполни профессиональную деликатную ретушь фотографии. Сохрани индивидуальность человека и все черты лица. Убери только временные несовершенства кожи, сохрани естественные поры, текстуру и реалистичность. Не меняй форму лица и тела.",
-
   fashion: "Создай стильную профессиональную fashion-фотографию. Сохрани идентичность человека, лицо, пропорции и естественную позу. Улучши стилистику кадра, освещение, композицию и детали одежды без искажения внешности.",
-
   studio: "Создай эффект профессиональной фотосессии в современной фотостудии. Сохрани точную идентичность человека и естественные черты лица. Добавь мягкий студийный свет, красивый фон, глубину кадра и реалистичную фотографическую детализацию.",
-
   creative: ""
-
 };
-
-$$(".mode").forEach(button => {
-
-  button.addEventListener("click", () => {
-
-    $$(".mode").forEach(item => item.classList.remove("active"));
-
-    button.classList.add("active");
-
-    state.mode = button.dataset.mode;
-
-    const defaultPrompt = MODE_PROMPTS[state.mode] || "";
-
-    if (defaultPrompt && promptInput && !promptInput.value.trim()) {
-
-      promptInput.value = defaultPrompt;
-
-    }
-
-    if (statusBox) statusBox.textContent = "";
-
-  });
-
-});
-
-$("#presets")?.addEventListener("click", event => {
-
-  const button = event.target.closest("[data-prompt]");
-
-  if (!button || !promptInput) return;
-
-  promptInput.value = button.dataset.prompt;
-
-  promptInput.focus();
-
-});
 
 function setStatus(message, type = "") {
   if (!statusBox) return;
   statusBox.textContent = message;
-  statusBox.className = "status" + (type ? \` \${type}\` : "");
+  statusBox.className = "status" + (type ? " " + type : "");
 }
 
 function clearPreviousResult() {
-
-  if (state.resultUrl) {
-
-    URL.revokeObjectURL(state.resultUrl);
-
-    state.resultUrl = null;
-
-  }
+  state.resultUrl = null;
 
   if (resultImage) {
-
     resultImage.removeAttribute("src");
-
     resultImage.style.display = "none";
-
   }
 
   if (emptyResult) emptyResult.style.display = "grid";
-
   if (saveButton) saveButton.style.display = "none";
-
 }
 
 function validateImage(file) {
-
   if (!file) {
-
     setStatus("Сначала выбери фотографию.", "error");
-
     return false;
-
   }
 
   const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
 
   if (!allowedTypes.includes(file.type)) {
-
     setStatus("Поддерживаются только JPG, PNG и WebP.", "error");
-
     return false;
-
   }
 
   if (file.size > 15 * 1024 * 1024) {
-
     setStatus("Файл слишком большой. Максимальный размер — 15 МБ.", "error");
-
     return false;
-
   }
 
   return true;
-
 }
 
-photoInput?.addEventListener("change", () => {
+$$(".mode").forEach(button => {
+  button.addEventListener("click", () => {
+    $$(".mode").forEach(item => item.classList.remove("active"));
+    button.classList.add("active");
 
+    state.mode = button.dataset.mode;
+
+    if (promptInput && !promptInput.value.trim()) {
+      promptInput.value = MODE_PROMPTS[state.mode] || "";
+    }
+
+    setStatus("");
+  });
+});
+
+$("#presets")?.addEventListener("click", event => {
+  const button = event.target.closest("[data-prompt]");
+  if (!button || !promptInput) return;
+
+  promptInput.value = button.dataset.prompt;
+  promptInput.focus();
+});
+
+photoInput?.addEventListener("change", () => {
   const file = photoInput.files?.[0];
 
   clearPreviousResult();
 
   if (!file) {
-
     state.selectedFile = null;
-
     if (previewImage) previewImage.style.display = "none";
-
     return;
-
   }
 
   if (!validateImage(file)) {
-
     photoInput.value = "";
-
     state.selectedFile = null;
-
     if (previewImage) previewImage.style.display = "none";
-
     return;
-
   }
 
   state.selectedFile = file;
@@ -2845,190 +2785,162 @@ photoInput?.addEventListener("change", () => {
   const reader = new FileReader();
 
   reader.onload = () => {
-
     if (!previewImage) return;
 
     previewImage.src = reader.result;
-
     previewImage.style.display = "block";
-
   };
 
   reader.onerror = () => {
-
     setStatus("Не удалось прочитать фотографию. Попробуй другой файл.", "error");
-
   };
 
   reader.readAsDataURL(file);
 
-  setStatus("Фотография загружена. Теперь опиши результат.");
-
+  setStatus("Фото загружено. Теперь опиши желаемый результат.", "success");
 });
 
 function getFinalPrompt() {
-
   const customPrompt = promptInput?.value.trim() || "";
-
   const modePrompt = MODE_PROMPTS[state.mode] || "";
 
   if (customPrompt) return customPrompt;
 
   return modePrompt;
-
 }
 
 async function processPhoto() {
-
   const file = state.selectedFile;
-
   const prompt = getFinalPrompt();
-
   const accessKey = $("#access")?.value.trim() || "";
 
   if (!validateImage(file)) return;
 
   if (!prompt) {
-
     setStatus("Опиши, что нужно изменить на фотографии.", "error");
-
     promptInput?.focus();
-
     return;
-
   }
 
   if (!accessKey) {
-
     setStatus("Введи тестовый код доступа.", "error");
-
     $("#access")?.focus();
-
     return;
-
   }
 
   clearPreviousResult();
 
-  setStatus("Проверяем запрос. Подожди...", "loading");
+  setStatus("Отправляем фотографию...", "loading");
 
   runButton.disabled = true;
+  runButton.textContent = "Обрабатываем...";
 
-  runButton.textContent = "Подготовка...";
+  let progressTimer = null;
+  let progressIndex = 0;
+
+  const progressMessages = [
+    "ИИ анализирует фотографию...",
+    "Работаем над освещением и деталями...",
+    "Формируем результат...",
+    "Завершаем обработку..."
+  ];
+
+  progressTimer = setInterval(() => {
+    if (progressIndex < progressMessages.length) {
+      setStatus(progressMessages[progressIndex], "loading");
+      progressIndex++;
+    }
+  }, 8000);
 
   try {
-
     const formData = new FormData();
 
     formData.append("image", file, file.name);
-
     formData.append("prompt", prompt);
-
     formData.append("mode", state.mode);
 
     const response = await fetch("/api/edit", {
-
       method: "POST",
-
       headers: {
-
         "X-V4-Test-Key": accessKey
-
       },
-
       body: formData
-
     });
 
     let data = {};
 
     try {
-
       data = await response.json();
-
     } catch {
-
       throw new Error("Сервер вернул некорректный ответ.");
-
     }
 
     if (!response.ok) {
-
-throw new Error(data.error || \`Ошибка обработки: \${response.status}\`);
-
+      throw new Error(data.error || "Ошибка обработки: " + response.status);
     }
 
     if (!data.image) {
-
       throw new Error("Сервер не вернул готовое изображение.");
-
     }
 
     const imageData = data.image.startsWith("data:")
-
       ? data.image
-
- : \`data:image/png;base64,\${data.image}\`;
+      : "data:image/png;base64," + data.image;
 
     if (resultImage) {
-
       resultImage.src = imageData;
-
       resultImage.style.display = "block";
-
     }
 
     if (emptyResult) emptyResult.style.display = "none";
-
     if (saveButton) saveButton.style.display = "block";
 
     state.resultUrl = imageData;
 
     setStatus("Готово! Результат можно сохранить.", "success");
 
-  } catch (error) {
+    if (resultImage) {
+      resultImage.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+      });
+    }
 
+  } catch (error) {
     console.error("AI Bratishka V4:", error);
 
-    setStatus(error.message || "Не удалось обработать фотографию. Попробуй позже.", "error");
+    setStatus(
+      error.message || "Не удалось обработать фотографию. Попробуй позже.",
+      "error"
+    );
 
   } finally {
+    if (progressTimer) clearInterval(progressTimer);
 
     runButton.disabled = false;
-
     runButton.textContent = "Обработать фотографию";
-
   }
-
 }
 
 runButton?.addEventListener("click", processPhoto);
 
 saveButton?.addEventListener("click", () => {
-
   if (!state.resultUrl) return;
 
   const link = document.createElement("a");
-
   link.href = state.resultUrl;
-
-link.download = \`ai-bratishka-\${Date.now()}.png\`;
+  link.download = "ai-bratishka-" + Date.now() + ".png";
 
   document.body.appendChild(link);
-
   link.click();
-
   link.remove();
 
+  setStatus("Сохранение изображения запущено.", "success");
 });
 
 $("#access")?.addEventListener("keydown", event => {
-
   if (event.key === "Enter") processPhoto();
-
 });
-
-</script>
 
 </body>
 
