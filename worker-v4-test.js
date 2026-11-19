@@ -1917,6 +1917,224 @@ body {
     padding: 8px 3px;
   }
 }
+
+/* ===== AI BRATISHKA V4: FINAL MOBILE & PREMIUM FIX ===== */
+
+/* Благородная палитра: обсидиан + спокойное золото */
+:root {
+  --bg: #080808;
+  --panel: #141311;
+  --surface: #1b1916;
+  --surface2: #211d17;
+  --text: #f5f0e6;
+  --muted: #a9a194;
+  --accent: #D6A94B;
+  --gold: #D6A94B;
+  --gold-soft: #F0CB75;
+  --line: #594522;
+}
+
+/* Общая геометрия */
+html {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  background-color: #080808;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+img,
+video,
+canvas {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Спокойные тени вместо чрезмерного свечения */
+.panel,
+.collection,
+.featured-card,
+.tool-card,
+.studio-promo {
+  box-shadow: 0 12px 35px #0007;
+}
+
+.panel {
+  border-color: #493b25;
+}
+
+/* Переход к более благородному золоту */
+.eyebrow,
+.pill,
+.filter.active,
+.chip.active,
+.model-filter.active,
+.collection-chip.active,
+.category-card.active,
+.template-use,
+.favorite-button.active {
+  color: #F0CB75;
+}
+
+.filter.active,
+.chip.active,
+.nav-item.active {
+  box-shadow: none;
+}
+
+/* Умеренные золотые рамки */
+.panel,
+.collection,
+.featured-card,
+.tool-card,
+.studio-promo,
+.category-card,
+.template-card {
+  border-color: #594522;
+}
+
+/* Мобильная версия */
+@media (max-width: 760px) {
+
+  html,
+  body {
+    width: 100%;
+    min-width: 320px;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  .shell {
+    width: 100%;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .layout {
+    width: 100%;
+    max-width: 100%;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .panel,
+  .library,
+  .hero,
+  .home-hero,
+  .studio-promo,
+  .studio-section,
+  .home-screen,
+  .library-section {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .cards,
+  .featured-grid,
+  .tool-grid,
+  .categories,
+  .collections,
+  .history-grid,
+  .modes {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .cards,
+  .featured-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .input,
+  .search,
+  .textarea,
+  input,
+  textarea,
+  select {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    font-size: 16px !important;
+  }
+
+  .tools {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .top {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  /* Нижняя навигация */
+  .bottom-nav {
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    max-width: 100%;
+    transform: none;
+    padding-bottom: calc(9px + env(safe-area-inset-bottom));
+  }
+
+  .nav-item {
+    min-width: 0;
+  }
+
+  .nav-item small {
+    white-space: normal;
+    text-align: center;
+  }
+
+  body {
+    padding-bottom: calc(100px + env(safe-area-inset-bottom));
+  }
+}
+
+/* Узкие экраны */
+@media (max-width: 370px) {
+
+  .shell {
+    padding-left: 11px;
+    padding-right: 11px;
+  }
+
+  .panel {
+    padding: 12px;
+  }
+
+  .cards,
+  .featured-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .bottom-nav {
+    gap: 1px;
+    padding-left: 4px;
+    padding-right: 4px;
+  }
+
+  .nav-item small {
+    font-size: 9px;
+  }
+}
+
 </style>
 
 </head>
