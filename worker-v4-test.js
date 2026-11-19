@@ -3620,6 +3620,8 @@ async function handleEdit(request, env) {
       error: "Размер фотографии должен быть от 1 байта до 25 МБ."
     }, 400);
   }
+
+  if (typeof prompt !== "string" || !prompt.trim()) {
     return jsonResponse({
       error: "Необходимо описать желаемый результат."
     }, 400);
