@@ -138,9 +138,9 @@ const HTML = `<!DOCTYPE html>
 <meta name="theme-color" content="#0b0d12">
 <title>AI Bratishka Studio</title>
 <style>
-:root{color-scheme:dark;--bg:#0b0d12;--panel:#141821;--line:#2a3140;--muted:#9ba5b7;--text:#f5f7fb;--accent:#9b8cff}
+:root{color-scheme:dark;--bg:#090a0c;--panel:#141416;--line:#302c25;--muted:#a5a19a;--text:#f5f1e8;--accent:#d6b66a;--gold:#d6b66a;--gold-soft:#f0dfb2}
 *{box-sizing:border-box}
-body{margin:0;background:radial-gradient(ellipse at 50% -15%,#292448 0,transparent 42%),var(--bg);color:var(--text);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+body{margin:0;background:radial-gradient(ellipse at 50% -20%,#29251b 0,transparent 45%),var(--bg);color:var(--text);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
 button,input,textarea{font:inherit}button{cursor:pointer}
 .shell{max-width:1120px;margin:auto;padding:22px 18px 60px}
 .top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:25px}
