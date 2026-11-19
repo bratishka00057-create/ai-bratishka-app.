@@ -477,32 +477,53 @@ button{cursor:pointer}
   border-radius:15px;
   padding:17px;
   text-align:center;
-  transition:border-color .2s,background .2s
+  transition:border-color .2s,background .2s;
 }
 
-.upload:hover{border-color:#d6b66a;background:#181510}
-.upload input{
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  opacity:0;
+.upload:hover{
+  border-color:#d6b66a;
+  background:#181510;
+}
+
+.upload-label{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
   cursor:pointer;
-  z-index:2;
+  padding:12px;
+  border-radius:12px;
 }
-.upload{
-  position:relative;
-}
-.upload label{
-  position:relative;
-  z-index:1;
+
+.upload-label input[type="file"]{
   display:block;
+  position:static;
+  width:100%;
+  height:auto;
+  opacity:1;
+  z-index:auto;
   cursor:pointer;
+  color:#C49A45;
+  font-size:12px;
+  margin-bottom:8px;
 }
-.upload label{display:block;cursor:pointer}
-.upload-icon{font-size:27px;margin-bottom:7px}
-.upload b{font-size:13px}
-.upload small{display:block;color:var(--muted);font-size:11px;margin-top:5px}
+
+.upload-icon{
+  font-size:27px;
+  margin-bottom:7px;
+}
+
+.upload b{
+  font-size:13px;
+}
+
+.upload small{
+  display:block;
+  color:var(--muted);
+  font-size:11px;
+  margin-top:5px;
+}
 
 .preview{
   display:none;
