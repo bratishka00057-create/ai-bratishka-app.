@@ -671,7 +671,6 @@ button{cursor:pointer}
     radial-gradient(ellipse at 85% 15%,#49371d66,transparent 48%),
     linear-gradient(135deg,#211b13,#10100f 70%);
 }
-
 .hero-content {
   position:relative;
   z-index:1;
