@@ -1420,27 +1420,26 @@ button{cursor:pointer}
   }
 }
 
-
 /* ===== PREMIUM GOLD DESIGN UPDATE ===== */
 
 :root {
-  --accent:#E5A928;
-  --gold:#E5A928;
-  --gold-soft:#FFD15C;
-  --line:#986313;
+  --accent:#F0B928;
+  --gold:#F0B928;
+  --gold-soft:#FFD76A;
+  --line:#A87518;
 }
 
 /* Основные золотые акценты */
 .eyebrow,
 .search-box span,
 .clear-search {
-  color:#FFD15C;
+  color:#FFD76A;
 }
 
 .pill {
-  color:#FFD15C;
-  border-color:#986313;
-  background:linear-gradient(135deg,#21170a,#13110d);
+  color:#FFD76A;
+  border-color:#A87518;
+  background:linear-gradient(135deg,#2B1E08,#17120A);
 }
 
 .filter.active,
@@ -1556,6 +1555,29 @@ body {
   padding-bottom:100px;
 }
 
+/* Усиление золотых акцентов */
+#catalog .filter.active,
+#catalog .model-filter.active,
+#catalog .collection-chip.active,
+#catalog .category-card.active,
+#catalog .category-all,
+#catalog .template-card:active,
+#catalog .template-use,
+#catalog .favorite-button {
+  border-color:#F0B928;
+}
+
+#catalog .filter.active,
+#catalog .model-filter.active,
+#catalog .collection-chip.active,
+#catalog .template-use,
+#catalog .favorite-button {
+  color:#FFD76A;
+}
+
+#catalog .category-card.active {
+  box-shadow:0 0 8px #F0B92835;
+}
 .bottom-nav {
   position:fixed;
   z-index:100;
