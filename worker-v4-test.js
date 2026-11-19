@@ -481,7 +481,24 @@ button{cursor:pointer}
 }
 
 .upload:hover{border-color:#d6b66a;background:#181510}
-.upload input{display:none}
+.upload input{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  opacity:0;
+  cursor:pointer;
+  z-index:2;
+}
+.upload{
+  position:relative;
+}
+.upload label{
+  position:relative;
+  z-index:1;
+  display:block;
+  cursor:pointer;
+}
 .upload label{display:block;cursor:pointer}
 .upload-icon{font-size:27px;margin-bottom:7px}
 .upload b{font-size:13px}
