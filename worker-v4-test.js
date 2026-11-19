@@ -1,5 +1,6 @@
 const MODEL = "gpt-image-2.6-sunburst";
-const MAX_FILE_SIZE = 15 * 1024 * 1024;
+const MAX_FILE_SIZE = 25 * 1024 * 1024;
+const MAX_FILE_SIZE_LABEL = "25 МБ";
 
 const PHOTO_GROUPS = [
   ["portrait-men","Мужские портреты","👨",[
@@ -2322,25 +2323,25 @@ body {
 
 <div class="upload">
 
-  <label class="upload-label">
-
-    <input
-
-      id="photo"
-
-      type="file"
-
-      accept="image/jpeg,image/png,image/webp"
-
-    >
+  <label class="upload-label" for="photo">
 
     <span class="upload-icon">⬆️</span>
 
     <b>Выбрать фотографию</b>
 
-    <small>Нажми, чтобы открыть галерею устройства</small>
+    <small>JPG, PNG, WebP, HEIC, HEIF, AVIF и другие форматы изображений. До 25 МБ.</small>
 
   </label>
+
+  <input
+
+    id="photo"
+
+    type="file"
+
+    accept="image/*,.heic,.heif,.avif"
+
+  >
 
   <img
 
@@ -2976,16 +2977,114 @@ function validateImage(file) {
     return false;
   }
 
-  const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
+  const allowedTypes = [
+    "image/jpeg",
+    "image/png",
+    "image/webp",
+    "image/heic",
+    "image/heif",
+    "image/heic-sequence",
+    "image/heif-sequence",
+    "image/avif",
+    "image/gif",
+    "image/bmp",
+    "image/tiff"
+  ];
 
-  if (!allowedTypes.includes(file.type)) {
-    setStatus("Поддерживаются только JPG, PNG и WebP.", "error");
+  const fileName = (file.name || "").toLowerCase();
+
+  const allowedExtensions = [
+    ".jpg",
+    ".jpeg",
+    ".png",
+    ".webp",
+    ".heic",
+    ".heif",
+    ".avif",
+    ".gif",
+    ".bmp",
+    ".tif",
+    ".tiff"
+  ];
+
+  const hasAllowedExtension = allowedExtensions.some(ext =>
+    fileName.endsWith(ext)
+  );
+
+  const hasAllowedType = allowedTypes.includes(
+    (file.type || "").toLowerCase()
+  );
+
+  if (!hasAllowedType && !hasAllowedExtension) {
+    setStatus("Выбери файл изображения поддерживаемого формата.", "error");
     return false;
   }
 
-  if (file.size > 15 * 1024 * 1024) {
-    setStatus("Файл слишком большой. Максимальный размер — 15 МБ.", "error");
+  if (file.size === 0) {
+    setStatus("Файл пустой или повреждён.", "error");
     return false;
+  }
+
+  if (file.size > MAX_FILE_SIZE) {
+    setStatus("Фотография слишком большая. Максимум 25 МБ.", "error");
+    return false;
+  }
+
+  return true;
+}
+  if (!file) {
+    setStatus("Сначала выбери фотографию.", "error");
+    return false;
+  }
+
+  const allowedTypes = [
+    "image/jpeg",
+    "image/png",
+    "image/webp",
+    "image/heic",
+    "image/heif",
+    "image/heic-sequence",
+    "image/heif-sequence",
+    "image/avif",
+    "image/gif",
+    "image/bmp",
+    "image/tiff"
+  ];
+
+  const allowedExtensions = [
+    ".jpg",
+    ".jpeg",
+    ".png",
+    ".webp",
+    ".heic",
+    ".heif",
+    ".avif",
+    ".gif",
+    ".bmp",
+    ".tif",
+    ".tiff"
+  ];
+
+  const imageName = (image.name || "").toLowerCase();
+
+  const hasAllowedExtension = allowedExtensions.some(ext =>
+    imageName.endsWith(ext)
+  );
+
+  const hasAllowedType = allowedTypes.includes(
+    (image.type || "").toLowerCase()
+  );
+
+  if (!hasAllowedType && !hasAllowedExtension) {
+    return jsonResponse({
+      error: "Формат фотографии не поддерживается."
+    }, 400);
+  }
+
+  if (image.size === 0 || image.size > MAX_FILE_SIZE) {
+    return jsonResponse({
+      error: "Размер фотографии должен быть от 1 байта до 25 МБ."
+    }, 400);
   }
 
   return true;
@@ -3014,29 +3113,24 @@ $("#presets")?.addEventListener("click", event => {
   promptInput.focus();
 });
 
-
 photoInput?.addEventListener("change", async function () {
   const file = this.files && this.files[0];
 
   clearPreviousResult();
 
-  if (!file) {
-    state.selectedFile = null;
-    if (previewImage) previewImage.style.display = "none";
-    return;
+  if (previewImage) {
+    previewImage.removeAttribute("src");
+    previewImage.style.display = "none";
   }
 
-  if (!file.type || !file.type.startsWith("image/")) {
-    setStatus("Выбери файл изображения.", "error");
-    this.value = "";
-    state.selectedFile = null;
+  state.selectedFile = null;
+
+  if (!file) {
     return;
   }
 
   if (!validateImage(file)) {
     this.value = "";
-    state.selectedFile = null;
-    if (previewImage) previewImage.style.display = "none";
     return;
   }
 
@@ -3046,14 +3140,36 @@ photoInput?.addEventListener("change", async function () {
     const imageUrl = URL.createObjectURL(file);
 
     if (previewImage) {
+      previewImage.onload = function () {
+        previewImage.style.display = "block";
+      };
+
+      previewImage.onerror = function () {
+        previewImage.style.display = "none";
+        setStatus(
+          "Фото выбрано, но предпросмотр этого формата не поддерживается браузером.",
+          "error"
+        );
+      };
+
       previewImage.src = imageUrl;
-      previewImage.style.display = "block";
     }
 
-    setStatus("Фото загружено. Теперь опиши желаемый результат.", "success");
+    setStatus(
+      "Фотография выбрана. Размер: " +
+      (file.size / 1024 / 1024).toFixed(2) +
+      " МБ. Теперь опиши желаемый результат.",
+      "success"
+    );
+
   } catch (error) {
     state.selectedFile = null;
-    setStatus("Не удалось открыть фотографию. Попробуй другой файл.", "error");
+    this.value = "";
+
+    setStatus(
+      "Не удалось открыть фотографию. Попробуй другой файл.",
+      "error"
+    );
   }
 });
 function getFinalPrompt() {
