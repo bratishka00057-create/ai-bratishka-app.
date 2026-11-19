@@ -2299,23 +2299,39 @@ body {
 
       </div>
 
-      <div class="upload">
+<div class="upload">
 
-        <label for="photo">
+  <label class="upload-label">
 
-          <div class="upload-icon">⬆️</div>
+    <input
 
-          <b>Выбрать фотографию</b>
+      id="photo"
 
-          <small>Нажми, чтобы открыть галерею устройства</small>
+      type="file"
 
-        </label>
+      accept="image/jpeg,image/png,image/webp"
 
-        <input id="photo" type="file" accept="image/jpeg,image/png,image/webp">
+    >
 
-        <img id="preview" class="preview" alt="Предпросмотр исходной фотографии">
+    <span class="upload-icon">⬆️</span>
 
-      </div>
+    <b>Выбрать фотографию</b>
+
+    <small>Нажми, чтобы открыть галерею устройства</small>
+
+  </label>
+
+  <img
+
+    id="preview"
+
+    class="preview"
+
+    alt="Предпросмотр исходной фотографии"
+
+  >
+
+</div>
 
       <label class="field-label" for="prompt">03 · Опиши желаемый результат</label>
 
