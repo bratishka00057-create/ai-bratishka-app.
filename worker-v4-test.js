@@ -2156,6 +2156,74 @@ canvas {
   }
 }
 
+/* ===== AI BRATISHKA — PREMIUM HERO ===== */
+
+.home-hero {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(214,182,106,.35);
+  border-radius: 22px;
+  padding: clamp(22px,5vw,42px);
+  background:
+    radial-gradient(ellipse at 80% 15%,rgba(214,182,106,.16),transparent 45%),
+    linear-gradient(145deg,#211b13,#0b0b0b 72%);
+  box-shadow: 0 12px 45px rgba(0,0,0,.35);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 650px;
+}
+
+.home-hero .eyebrow {
+  color: #e4c77f;
+  letter-spacing: 2px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.home-hero h1 {
+  font-size: clamp(34px,8vw,58px);
+  line-height: 1.08;
+  letter-spacing: -1.5px;
+  margin: 18px 0;
+}
+
+.home-hero h1 span {
+  color: #e0bd70;
+}
+
+.home-hero p {
+  color: #c6bba8;
+  line-height: 1.65;
+  max-width: 480px;
+}
+
+.hero-cta {
+  background: linear-gradient(135deg,#f0d58f,#bd9141);
+  color: #17120a;
+  border: none;
+  border-radius: 14px;
+  font-weight: 800;
+  box-shadow: 0 5px 24px rgba(214,182,106,.22);
+}
+
+.hero-caption {
+  color: #9e9078;
+  font-size: 10px;
+  letter-spacing: 1.4px;
+  margin-top: 20px;
+}
+
+.caption-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  background: #e0bd70;
+  border-radius: 50%;
+  margin-right: 8px;
+}
 </style>
 
 </head>
