@@ -205,11 +205,13 @@ button{cursor:pointer}
 }
 
 .brand b{
-  font-size:17px;
-  letter-spacing:1.5px;
-  font-weight:800;
-  color:#f5dfaa;
-  text-shadow:0 0 12px #d6b66a25
+  display:block;
+  font-size:15px;
+  letter-spacing:2px;
+  font-weight:700;
+  color:#e8c875;
+  line-height:1.15;
+  text-shadow:none
 }
 .brand small{
   display:block;
