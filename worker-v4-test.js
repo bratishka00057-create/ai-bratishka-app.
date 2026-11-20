@@ -2245,7 +2245,7 @@ canvas {
 .bratishka-hero .hero-image {
   position: absolute;
   inset: 0;
-  z-index: -1;
+  z-index: 0;
   background:
     radial-gradient(
       ellipse at 75% 30%,
