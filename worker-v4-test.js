@@ -210,12 +210,16 @@ button{cursor:pointer}
 }
 
 .pill{
-  font-size:11px;
-  color:#dfc783;
-  border:1px solid #6c5934;
-  background:#211c13;
-  padding:8px 11px;
-  border-radius:99px
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:1.2px;
+  color:#f3d58e;
+  border:1px solid #8e713d;
+  background:linear-gradient(135deg,#292116,#17130d);
+  padding:7px 12px;
+  border-radius:99px;
+  box-shadow:0 0 12px #d6b66a18;
+  white-space:nowrap
 }
 
 .hero{margin-bottom:26px}
