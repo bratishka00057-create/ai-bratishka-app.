@@ -2255,7 +2255,7 @@ canvas {
       rgba(0,0,0,.25) 72%,
       rgba(0,0,0,.08) 100%
     ),
-    url("https://raw.githubusercontent.com/bratishka00057-create/ai-bratishka-app./main/hero-bratishka-v4.png.PNG");
+    url("https://raw.githubusercontent.com/bratishka00057-create/ai-bratishka-app./main/hero-bratishka-v4..webp");
 
   background-size: cover;
   background-position: center right;
@@ -2305,7 +2305,7 @@ canvas {
         rgba(0,0,0,.65) 72%,
         rgba(0,0,0,.20) 100%
       ),
-      url("https://raw.githubusercontent.com/bratishka00057-create/ai-bratishka-app./main/hero-bratishka-v4.png.PNG");
+      url("https://raw.githubusercontent.com/bratishka00057-create/ai-bratishka-app./main/hero-bratishka-v4..webp");
 
     background-position: 75% center;
   }
