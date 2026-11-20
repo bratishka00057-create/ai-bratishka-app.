@@ -2293,6 +2293,23 @@ canvas {
     font-size: 14px;
   }
 }
+/* ===== MOBILE HERO FIX ===== */
+
+@media (max-width: 600px) {
+  .bratishka-hero .hero-image {
+    background-image:
+      linear-gradient(
+        90deg,
+        rgba(0,0,0,.99) 0%,
+        rgba(0,0,0,.94) 45%,
+        rgba(0,0,0,.65) 72%,
+        rgba(0,0,0,.20) 100%
+      ),
+      url("https://raw.githubusercontent.com/bratishka00057-create/ai-bratishka-app./main/hero-bratishka-v4.png.PNG");
+
+    background-position: 75% center;
+  }
+}
 </style>
 
 </head>
