@@ -177,18 +177,19 @@ button{cursor:pointer}
   margin-bottom:30px
 }
 
-.brand{display:flex;align-items:center;gap:11px}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:#f0dfb2}
 
 .logo{
-  width:42px;
-  height:42px;
-  border-radius:14px;
-  background:linear-gradient(135deg,#ead59b,#a27b39);
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,#fff0c2,#d6ad55 45%,#80551c 100%);
   display:grid;
   place-items:center;
   font-size:22px;
   color:#17130b;
-  box-shadow:0 0 25px #d6b66a25
+  box-shadow:0 0 18px #d6b66a35;
+  border:1px solid #f4d68a
 }
 
 .brand b{font-size:16px;letter-spacing:.6px}
@@ -2322,13 +2323,13 @@ canvas {
 
   <a class="brand" href="#home">
 
-    <div class="logo">✦</div>
+    <div class="logo">◉</div>
 
-    <div>
+    <div class="brand-text">
 
-      <b>AI BRATISHKA</b>
+      <b>BRATISHKA</b>
 
-      <small>CREATIVE STUDIO</small>
+      <small>AI CREATIVE STUDIO</small>
 
     </div>
 
@@ -2336,7 +2337,7 @@ canvas {
 
   <div class="top-actions">
 
-    <span class="pill">V4 · TEST MODE</span>
+    <span class="pill">PRO ✦</span>
 
     <button class="profile-button" id="profileButton" type="button" aria-label="Профиль">●</button>
 
