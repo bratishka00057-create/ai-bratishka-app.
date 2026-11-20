@@ -2262,35 +2262,35 @@ canvas {
 
 <section class="home-screen" id="home">
 
-  <div class="home-hero">
+<div class="home-hero bratishka-hero">
 
-    <div class="hero-image"></div>
+  <div class="hero-image"></div>
 
-    <div class="hero-content">
+  <div class="hero-content">
 
-      <div class="eyebrow">ТВОЯ ЛИЧНАЯ AI-КИНОСТУДИЯ</div>
+    <div class="eyebrow">AI BRATISHKA · CREATIVE STUDIO</div>
 
-      <h1>Твоя идея.<br><span>Твой фильм.</span></h1>
+    <h1>ТВОЙ КОНТЕНТ.<br><span>ТВОИ ПРАВИЛА.</span></h1>
 
-      <p>Создавай впечатляющие фотографии и открывай мир AI-видео. Твоя творческая студия — прямо в телефоне.</p>
+    <p>Создавай. Преображай. Удивляй. Твоя AI-студия фото и кино — в одном месте.</p>
 
-      <button class="primary hero-cta" id="openStudio" type="button">
+    <button class="primary hero-cta" id="openStudio" type="button">
 
-        Открыть киностудию <span>↗</span>
+      СОЗДАТЬ ВАУ <span>↗</span>
 
-      </button>
+    </button>
 
-      <div class="hero-caption">
+    <div class="hero-caption">
 
-        <span class="caption-dot"></span>
+      <span class="caption-dot"></span>
 
-        IMAGE STUDIO · VIDEO IDEAS · AI CREATION
-
-      </div>
+      ФОТО · СТИЛЬ · КИНО · AI-ОБРАЗЫ
 
     </div>
 
   </div>
+
+</div>
 
   <div class="section-heading">
 
