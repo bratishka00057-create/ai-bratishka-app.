@@ -2260,10 +2260,12 @@ canvas {
   border-radius: 50%;
   margin-right: 8px;
 }
-/* ===== BRATISHKA HERO — COMPOSITION ===== */
+/* ===== BRATISHKA HERO — CLEAN PREMIUM VERSION ===== */
 
 .bratishka-hero {
-  min-height: 490px;
+  box-sizing: border-box;
+  min-height: 430px;
+  padding: 34px 30px;
   display: flex;
   align-items: center;
   position: relative;
@@ -2283,10 +2285,10 @@ canvas {
     linear-gradient(
       90deg,
       #080808 0%,
-      rgba(8,8,8,.98) 28%,
-      rgba(8,8,8,.80) 43%,
-      rgba(8,8,8,.15) 70%,
-      rgba(8,8,8,.02) 100%
+      rgba(8,8,8,.97) 30%,
+      rgba(8,8,8,.78) 47%,
+      rgba(8,8,8,.16) 72%,
+      rgba(8,8,8,0) 100%
     ),
     url("https://raw.githubusercontent.com/bratishka00057-create/ai-bratishka-app./main/hero-bratishka-v4..webp");
   background-size: 100% 100%, 58% 100%;
@@ -2297,24 +2299,24 @@ canvas {
 .bratishka-hero .hero-content {
   position: relative;
   z-index: 2;
-  width: 62%;
+  width: 61%;
   max-width: 600px;
-  padding: 30px 0;
+  padding: 10px 0;
 }
 
 .bratishka-hero .eyebrow {
   color: #e3bd65;
   font-size: 11px;
   font-weight: 700;
-  letter-spacing: 2px;
+  letter-spacing: 1.8px;
   line-height: 1.5;
 }
 
 .bratishka-hero h1 {
-  font-size: clamp(34px, 5vw, 54px);
+  font-size: clamp(34px,5vw,52px);
   line-height: 1.08;
   letter-spacing: -1px;
-  margin: 20px 0;
+  margin: 18px 0;
   font-weight: 900;
 }
 
@@ -2330,25 +2332,26 @@ canvas {
 }
 
 .bratishka-hero .hero-subtitle {
-  margin-bottom: 24px;
+  margin-bottom: 22px;
 }
 
 .bratishka-hero .hero-cta {
   width: 100%;
-  max-width: 390px;
-  min-height: 62px;
+  max-width: 360px;
+  min-height: 58px;
+  margin-top: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 10px;
   padding: 14px 20px;
   border-radius: 50px;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 900;
   letter-spacing: 1px;
   background: linear-gradient(135deg,#ffd65a,#d59c22);
   color: #080808;
-  box-shadow: 0 8px 30px rgba(230,180,50,.20);
+  box-shadow: 0 8px 30px rgba(230,180,50,.18);
 }
 
 .bratishka-hero .hero-star {
@@ -2358,11 +2361,11 @@ canvas {
 .bratishka-hero .hero-caption {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-top: 22px;
+  gap: 9px;
+  margin-top: 18px;
   color: #e0b849;
   font-size: 10px;
-  letter-spacing: 1.5px;
+  letter-spacing: 1.3px;
   line-height: 1.5;
 }
 
@@ -2370,14 +2373,13 @@ canvas {
   flex-shrink: 0;
 }
 
-/* MOBILE */
+/* ===== MOBILE ===== */
 
 @media (max-width: 600px) {
-
   .bratishka-hero {
-    min-height: 500px;
-    padding: 24px 18px;
-    border-radius: 20px;
+    min-height: 410px;
+    padding: 20px 16px;
+    border-radius: 18px;
   }
 
   .bratishka-hero .hero-image {
@@ -2385,61 +2387,80 @@ canvas {
       linear-gradient(
         90deg,
         #080808 0%,
-        rgba(8,8,8,.98) 32%,
-        rgba(8,8,8,.88) 48%,
-        rgba(8,8,8,.25) 78%,
-        rgba(8,8,8,.08) 100%
+        rgba(8,8,8,.96) 25%,
+        rgba(8,8,8,.80) 44%,
+        rgba(8,8,8,.24) 73%,
+        rgba(8,8,8,.05) 100%
       ),
       url("https://raw.githubusercontent.com/bratishka00057-create/ai-bratishka-app./main/hero-bratishka-v4..webp");
-
-    background-size: 100% 100%, 52% 100%;
+    background-size: 100% 100%, 60% 100%;
     background-position: left top, right center;
     background-repeat: no-repeat;
   }
 
   .bratishka-hero .hero-content {
-    width: 70%;
+    width: 66%;
     max-width: none;
-    padding: 10px 0;
+    padding: 6px 0;
   }
 
   .bratishka-hero .eyebrow {
     font-size: 9px;
-    letter-spacing: 1.4px;
+    letter-spacing: 1.2px;
   }
 
   .bratishka-hero h1 {
-    font-size: clamp(29px, 7.5vw, 36px);
-    line-height: 1.12;
+    font-size: clamp(27px,7.2vw,34px);
+    line-height: 1.1;
     letter-spacing: -.5px;
-    margin: 18px 0;
+    margin: 16px 0;
   }
 
   .bratishka-hero p {
-    font-size: 13px;
+    font-size: 12px;
     line-height: 1.45;
   }
 
   .bratishka-hero .hero-subtitle {
-    margin-bottom: 20px;
+    margin-bottom: 18px;
   }
 
   .bratishka-hero .hero-cta {
     max-width: 100%;
-    min-height: 54px;
-    padding: 12px 10px;
-    font-size: 12px;
-    gap: 8px;
+    min-height: 50px;
+    padding: 12px 9px;
+    font-size: 11px;
+    gap: 7px;
   }
 
   .bratishka-hero .hero-star {
-    font-size: 17px;
+    font-size: 16px;
   }
 
   .bratishka-hero .hero-caption {
-    margin-top: 18px;
+    margin-top: 15px;
     font-size: 8px;
-    letter-spacing: 1px;
+    letter-spacing: .8px;
+    gap: 6px;
+  }
+}
+
+@media (max-width: 360px) {
+  .bratishka-hero {
+    min-height: 390px;
+    padding: 16px 13px;
+  }
+
+  .bratishka-hero .hero-content {
+    width: 68%;
+  }
+
+  .bratishka-hero h1 {
+    font-size: 27px;
+  }
+
+  .bratishka-hero .hero-caption {
+    font-size: 7px;
   }
 }
 </style>
