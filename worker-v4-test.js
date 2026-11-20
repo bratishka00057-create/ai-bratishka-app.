@@ -2436,13 +2436,27 @@ canvas {
 
     <div class="eyebrow">AI BRATISHKA · CREATIVE STUDIO</div>
 
-    <h1>ТВОЙ КОНТЕНТ.<br><span>ТВОИ ПРАВИЛА.</span></h1>
+    <h1>
 
-    <p>Создавай. Преображай. Удивляй. Твоя AI-студия фото и кино — в одном месте.</p>
+      ТВОЙ КОНТЕНТ.
+
+      <br>
+
+      <span>ТВОИ ПРАВИЛА.</span>
+
+    </h1>
+
+    <p class="hero-subtitle">
+
+      Создавай. Преображай. Удивляй.
+
+    </p>
 
     <button class="primary hero-cta" id="openStudio" type="button">
 
-      СОЗДАТЬ ВАУ <span>↗</span>
+      <span class="hero-star">✦</span>
+
+      СОЗДАТЬ ВАУ
 
     </button>
 
