@@ -2348,7 +2348,7 @@ canvas {
 
   <a class="brand" href="#home">
 
-    <div class="logo">◉</div>
+   <div class="logo"><span class="iris-mark">✺</span></div>
 
     <div class="brand-text">
 
