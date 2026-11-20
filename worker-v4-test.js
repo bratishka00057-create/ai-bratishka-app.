@@ -215,11 +215,12 @@ button{cursor:pointer}
 }
 .brand small{
   display:block;
-  color:#bda777;
-  font-size:10px;
-  letter-spacing:1.8px;
-  margin-top:4px;
+  color:#b9a06a;
+  font-size:9px;
+  letter-spacing:1.4px;
+  margin-top:3px;
   font-weight:500;
+  line-height:1.2;
   text-transform:uppercase
 }
 
