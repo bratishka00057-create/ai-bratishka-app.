@@ -2224,6 +2224,67 @@ canvas {
   border-radius: 50%;
   margin-right: 8px;
 }
+/* ===== BRATISHKA HERO IMAGE ===== */
+
+.bratishka-hero {
+  min-height: 430px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  isolation: isolate;
+  background:
+    linear-gradient(90deg,
+      rgba(8,8,8,.98) 0%,
+      rgba(8,8,8,.90) 42%,
+      rgba(8,8,8,.30) 100%),
+    linear-gradient(0deg,
+      rgba(8,8,8,.65),
+      transparent 60%);
+}
+
+.bratishka-hero .hero-image {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(
+      ellipse at 75% 30%,
+      rgba(218,180,95,.22),
+      transparent 55%
+    );
+}
+
+.bratishka-hero .hero-content {
+  padding: 12px 0;
+}
+
+.bratishka-hero .hero-cta {
+  min-height: 56px;
+  padding: 0 26px;
+  font-size: 14px;
+  letter-spacing: 1px;
+}
+
+.bratishka-hero .hero-caption {
+  margin-top: 26px;
+}
+
+@media (max-width: 600px) {
+  .bratishka-hero {
+    min-height: 390px;
+    padding: 24px 20px;
+    border-radius: 20px;
+  }
+
+  .bratishka-hero h1 {
+    font-size: clamp(32px, 9vw, 44px);
+    line-height: 1.12;
+  }
+
+  .bratishka-hero p {
+    font-size: 14px;
+  }
+}
 </style>
 
 </head>
