@@ -2246,12 +2246,20 @@ canvas {
   position: absolute;
   inset: 0;
   z-index: 0;
+
   background:
-    radial-gradient(
-      ellipse at 75% 30%,
-      rgba(218,180,95,.22),
-      transparent 55%
-    );
+    linear-gradient(
+      90deg,
+      rgba(0,0,0,.96) 0%,
+      rgba(0,0,0,.82) 38%,
+      rgba(0,0,0,.25) 72%,
+      rgba(0,0,0,.08) 100%
+    ),
+    url("https://raw.githubusercontent.com/bratishka00057-create/ai-bratishka-app./main/hero-bratishka-v4.png.PNG");
+
+  background-size: cover;
+  background-position: center right;
+  background-repeat: no-repeat;
 }
 
 .bratishka-hero .hero-content {
