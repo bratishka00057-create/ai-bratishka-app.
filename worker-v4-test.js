@@ -2355,14 +2355,16 @@ canvas {
     border-radius: 22px;
   }
 
-  .bratishka-hero .hero-image {
-    background-position: 72% center;
-  }
+ .bratishka-hero .hero-image {
+  background-size: cover, auto 85%;
+  background-position: center, right center;
+  background-repeat: no-repeat;
+}
 
-  .bratishka-hero .hero-content {
-    max-width: 100%;
-    padding: 12px 0;
-  }
+ .bratishka-hero .hero-content {
+  max-width: 68%;
+  padding: 12px 0;
+}
 
   .bratishka-hero h1 {
     font-size: clamp(34px, 9vw, 44px);
