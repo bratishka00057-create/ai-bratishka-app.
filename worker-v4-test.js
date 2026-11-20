@@ -192,7 +192,13 @@ button{cursor:pointer}
   border:1px solid #f4d68a
 }
 
-.brand b{font-size:16px;letter-spacing:.6px}
+.brand b{
+  font-size:17px;
+  letter-spacing:1.5px;
+  font-weight:800;
+  color:#f5dfaa;
+  text-shadow:0 0 12px #d6b66a25
+}
 .brand small{display:block;color:var(--muted);font-size:11px;margin-top:3px}
 
 .pill{
