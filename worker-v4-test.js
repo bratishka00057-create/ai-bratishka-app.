@@ -174,7 +174,12 @@ button{cursor:pointer}
   align-items:center;
   justify-content:space-between;
   gap:12px;
-  margin-bottom:30px
+  padding:12px 14px;
+  border:1px solid #9b752d;
+  border-radius:24px;
+  background:linear-gradient(135deg,#15110b,#080808 65%);
+  box-shadow:0 0 18px #d6b66a12;
+  margin-bottom:22px
 }
 
 .brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:#f0dfb2}
