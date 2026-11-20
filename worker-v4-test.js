@@ -199,7 +199,15 @@ button{cursor:pointer}
   color:#f5dfaa;
   text-shadow:0 0 12px #d6b66a25
 }
-.brand small{display:block;color:var(--muted);font-size:11px;margin-top:3px}
+.brand small{
+  display:block;
+  color:#bda777;
+  font-size:10px;
+  letter-spacing:1.8px;
+  margin-top:4px;
+  font-weight:500;
+  text-transform:uppercase
+}
 
 .pill{
   font-size:11px;
