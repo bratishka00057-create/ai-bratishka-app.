@@ -1037,14 +1037,16 @@ button{cursor:pointer}
     height:38px;
   }
 
-  .top-actions {
-    gap:6px;
-  }
+.top-actions {
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
 
-  .pill {
-    padding:7px 8px;
-    font-size:9px;
-  }
+.pill {
+  padding:8px 12px;
+  font-size:10px;
+}
 
   .profile-button {
     width:36px;
