@@ -196,6 +196,13 @@ button{cursor:pointer}
   box-shadow:0 0 18px #d6b66a35;
   border:1px solid #f4d68a
 }
+.iris-mark{
+  display:block;
+  font-size:27px;
+  line-height:1;
+  color:#21180a;
+  text-shadow:0 1px 0 #fff0b8;
+}
 
 .brand b{
   font-size:17px;
