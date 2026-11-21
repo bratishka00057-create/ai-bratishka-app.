@@ -352,9 +352,7 @@ async fetch(request,env){
 const url=new URL(request.url);
 
 if(request.method==="GET"&&url.pathname==="/"){
-return new Response("AI Bratishka Studio v3 is running!",{
-headers:{"Content-Type":"text/plain; charset=utf-8"}
-});
+  return env.ASSETS.fetch(new Request(new URL("/index.html", request.url), request));
 }
 
 if(request.method==="GET"&&url.pathname==="/app"){
