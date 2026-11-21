@@ -1,0 +1,369 @@
+
+
+<!DOCTYPE html>
+
+<html lang="ru">
+
+<head>
+
+<meta charset="utf-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+<meta name="theme-color" content="#090909">
+
+<title>AI Bratishka — Creative Studio PRO</title>
+
+<style>
+
+:root {
+
+  --gold:#d9ad52;
+
+  --gold2:#f3d68b;
+
+  --bg:#090909;
+
+  --panel:#111;
+
+  --line:#30271a;
+
+  --text:#f4f0e7;
+
+  --muted:#a59b8a;
+
+}
+
+* { box-sizing:border-box }
+
+body {
+
+  margin:0;
+
+  background:radial-gradient(ellipse at 75% 5%,#20180d 0,transparent 38%),var(--bg);
+
+  color:var(--text);
+
+  font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+
+}
+
+.wrap { max-width:1000px;margin:auto;padding:18px 15px 60px }
+
+.top {
+
+  display:flex;align-items:center;justify-content:space-between;
+
+  padding:9px 3px 20px;border-bottom:1px solid #282116;
+
+}
+
+.brand { display:flex;align-items:center;gap:10px;letter-spacing:2px;font-weight:800 }
+
+.logo { color:var(--gold);font-size:24px }
+
+.brand small {
+
+  display:block;color:#b9a16c;font-size:10px;
+
+  letter-spacing:3px;margin-top:3px;
+
+}
+
+.pill {
+
+  border:1px solid #8d6827;color:var(--gold2);
+
+  padding:6px 12px;border-radius:20px;font-size:11px;letter-spacing:2px;
+
+}
+
+.hero {
+
+  position:relative;border:1px solid #312617;border-radius:20px;
+
+  overflow:hidden;margin-top:18px;background:#0b0b0b;
+
+}
+
+.hero img { display:block;width:100%;height:auto }
+
+.below {
+
+  display:grid;grid-template-columns:1.1fr .9fr;gap:16px;margin-top:20px;
+
+}
+
+.panel {
+
+  border:1px solid var(--line);
+
+  background:linear-gradient(145deg,#15130f,#0c0c0c);
+
+  border-radius:18px;padding:18px;
+
+}
+
+.panel h2 {
+
+  font-size:15px;letter-spacing:1.5px;color:var(--gold2);
+
+  margin:0 0 15px;
+
+}
+
+.upload {
+
+  min-height:130px;border:1px dashed #66502a;border-radius:13px;
+
+  display:flex;align-items:center;justify-content:center;
+
+  text-align:center;padding:16px;cursor:pointer;color:var(--muted);
+
+}
+
+.upload strong { display:block;color:var(--gold2);margin-bottom:6px }
+
+.upload input { display:none }
+
+.preview {
+
+  display:none;max-width:100%;max-height:260px;
+
+  margin:14px auto 0;border-radius:12px;
+
+}
+
+.textarea {
+
+  width:100%;min-height:100px;background:#080808;
+
+  border:1px solid #352a1a;color:white;border-radius:12px;
+
+  padding:14px;font-size:15px;resize:vertical;outline:none;
+
+  margin-top:14px;
+
+}
+
+.textarea:focus { border-color:var(--gold) }
+
+.options { display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 }
+
+.option {
+
+  background:#0a0a0a;border:1px solid #392d1c;border-radius:22px;
+
+  padding:9px 13px;color:#c7b58e;font-size:12px;cursor:pointer;
+
+}
+
+.option.active { background:#2a2113;border-color:var(--gold);color:var(--gold2) }
+
+.cta {
+
+  width:100%;border:0;border-radius:12px;padding:15px;
+
+  background:linear-gradient(110deg,#b88932,#f1d17d,#b88932);
+
+  color:#17110a;font-weight:900;letter-spacing:1.2px;
+
+  font-size:14px;cursor:pointer;
+
+}
+
+.cta:active { transform:scale(.99) }
+
+.note { font-size:12px;color:#918778;line-height:1.55;margin-top:12px }
+
+.templates { margin-top:20px }
+
+.cards { display:grid;grid-template-columns:repeat(3,1fr);gap:10px }
+
+.card {
+
+  border:1px solid var(--line);border-radius:14px;
+
+  padding:13px;background:#0d0d0d;cursor:pointer;color:#dfd0ae;
+
+}
+
+.card:hover,.card.selected { border-color:var(--gold) }
+
+.card b { display:block;font-size:13px;margin-bottom:5px }
+
+.card small { color:var(--muted) }
+
+.status { color:var(--gold2);font-size:12px;margin-top:10px;min-height:18px }
+
+@media(max-width:700px) {
+
+  .below { grid-template-columns:1fr }
+
+  .wrap { padding:12px }
+
+  .panel { padding:15px }
+
+  .cards { grid-template-columns:1fr 1fr }
+
+  .brand { font-size:13px }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<main class="wrap">
+
+<header class="top">
+
+  <div class="brand">
+
+    <span class="logo">✦</span>
+
+    <div>BRATISHKA<small>AI CREATIVE STUDIO</small></div>
+
+  </div>
+
+  <span class="pill">PRO</span>
+
+</header>
+
+<section class="hero" aria-label="Утверждённый макет">
+
+  <img src="/approved-mockup.png" alt="Утверждённый дизайн AI Bratishka">
+
+</section>
+
+<section class="below">
+
+<div class="panel">
+
+  <h2>ТВОЯ ФОТОСТУДИЯ</h2>
+
+  <label class="upload" for="file">
+
+    <span><strong>＋ Загрузить фото</strong>Выбери изображение на устройстве</span>
+
+    <input id="file" type="file" accept="image/*">
+
+  </label>
+
+  <img id="preview" class="preview" alt="Предпросмотр загруженного фото">
+
+  <textarea id="prompt" class="textarea" placeholder="Опиши, что хочешь изменить или создать…"></textarea>
+
+  <div class="options">
+
+    <button class="option active" data-mode="Фото">Фото</button>
+
+    <button class="option" data-mode="Редактирование">Редактирование</button>
+
+    <button class="option" data-mode="Стиль">Стиль</button>
+
+  </div>
+
+  <button class="cta" id="create">СОЗДАТЬ</button>
+
+  <div class="status" id="status"></div>
+
+  <p class="note">Это первый прототип интерфейса. Генерация пока не подключена к серверу.</p>
+
+</div>
+
+<div class="panel">
+
+  <h2>ПОПУЛЯРНЫЕ ШАБЛОНЫ</h2>
+
+  <div class="cards">
+
+    <div class="card" data-prompt="Кинематографичный портрет, драматичный свет"><b>Кинопортрет</b><small>Драматичный свет</small></div>
+
+    <div class="card" data-prompt="Премиальный editorial fashion образ"><b>Fashion</b><small>Стиль журнала</small></div>
+
+    <div class="card" data-prompt="Мягкий золотой свет, роскошная атмосфера"><b>Золотой час</b><small>Тёплая атмосфера</small></div>
+
+    <div class="card" data-prompt="Студийный портрет, чистый фон"><b>Студия</b><small>Чистый портрет</small></div>
+
+    <div class="card" data-prompt="Креативный футуристичный AI образ"><b>AI-образ</b><small>Новый стиль</small></div>
+
+    <div class="card" data-prompt="Кинематографическая сцена, выразительная композиция"><b>Кино</b><small>Сцена и атмосфера</small></div>
+
+  </div>
+
+</div>
+
+</section>
+
+</main>
+
+<script>
+
+const file=document.getElementById('file');
+
+const preview=document.getElementById('preview');
+
+const prompt=document.getElementById('prompt');
+
+const status=document.getElementById('status');
+
+file.addEventListener('change',()=>{
+
+  if(file.files&&file.files[0]){
+
+    preview.src=URL.createObjectURL(file.files[0]);
+
+    preview.style.display='block';
+
+    status.textContent='Фото выбрано.';
+
+  }
+
+});
+
+document.querySelectorAll('.option').forEach(b=>{
+
+  b.addEventListener('click',()=>{
+
+    document.querySelectorAll('.option').forEach(x=>x.classList.remove('active'));
+
+    b.classList.add('active');
+
+  });
+
+});
+
+document.querySelectorAll('.card').forEach(c=>{
+
+  c.addEventListener('click',()=>{
+
+    document.querySelectorAll('.card').forEach(x=>x.classList.remove('selected'));
+
+    c.classList.add('selected');
+
+    prompt.value=c.dataset.prompt;
+
+    status.textContent='Шаблон выбран — описание добавлено.';
+
+  });
+
+});
+
+document.getElementById('create').addEventListener('click',()=>{
+
+  status.textContent=file.files.length
+
+    ?'Фото и описание готовы для подключения генерации.'
+
+    :'Сначала загрузите фото или напишите описание.';
+
+});
+
+</script>
+
+</body>
+
+</html>
